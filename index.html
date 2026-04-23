@@ -1356,6 +1356,7 @@ html, body {
 <script type="module">
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
 // ===================== SCENE SETUP =====================
 const container = document.getElementById('scene-container');
@@ -1519,6 +1520,9 @@ scene.add(particles);
 // ===================== LOAD GLB MODEL =====================
 let cityModel = null;
 const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/libs/draco/');
+loader.setDRACOLoader(dracoLoader);
 const loaderBar = document.getElementById('loaderBar');
 const loaderPercent = document.getElementById('loaderPercent');
 const loaderEl = document.getElementById('loader');
@@ -1550,7 +1554,7 @@ function parseGLB(buffer) {
 
 (async () => {
   try {
-    const cityBuffer = await loadGLB('assets/scene/city.glb', (loaded, total) => {
+    const cityBuffer = await loadGLB('assets/scene/city-compressed.glb', (loaded, total) => {
       const pct = Math.round((loaded / total) * 100);
       loaderBar.style.width = pct + '%';
       loaderPercent.textContent = 'CARREGANDO CIDADE... ' + pct + '%';
