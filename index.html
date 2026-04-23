@@ -692,6 +692,17 @@ html, body {
   background: rgba(0,240,255,0.08);
   box-shadow: 0 0 12px rgba(0,240,255,0.2);
 }
+.pe-link-disabled {
+  border-color: rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.3);
+  cursor: default;
+}
+.pe-link-disabled:hover {
+  border-color: rgba(255,255,255,0.10);
+  background: none;
+  box-shadow: none;
+  color: rgba(255,255,255,0.3);
+}
 
 /* Contact */
 .contact-links {
@@ -1264,17 +1275,19 @@ html, body {
     <div class="project-entry">
       <div class="pe-num">01</div>
       <div class="pe-body">
-        <div class="pe-title">PLATAFORMA E-COMMERCE <span class="pe-status prod">PRODUÇÃO</span></div>
-        <div class="pe-desc">Sistema completo com painel admin, integração de pagamentos e gestão de estoque em tempo real.</div>
+        <div class="pe-title">ATENDE360 <span class="pe-status prod">PRODUÇÃO</span></div>
+        <div class="pe-desc">Site corporativo com animações GSAP, painel admin completo e integração de IA para geração automática de blogposts.</div>
         <div class="pe-tags">
-          <span class="pe-tag">NEXT.JS</span>
+          <span class="pe-tag">NUXT</span>
+          <span class="pe-tag">GSAP</span>
           <span class="pe-tag">NODE.JS</span>
+          <span class="pe-tag">PRISMA</span>
+          <span class="pe-tag">EXPRESS</span>
           <span class="pe-tag">POSTGRESQL</span>
-          <span class="pe-tag">AWS</span>
+          <span class="pe-tag">IA</span>
         </div>
         <div class="pe-links">
-          <a href="#" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
-          <a href="#" target="_blank" class="pe-link">◈ LIVE</a>
+          <span class="pe-link pe-link-disabled">⚿ PRIVADO</span>
         </div>
       </div>
     </div>
@@ -1282,15 +1295,16 @@ html, body {
     <div class="project-entry">
       <div class="pe-num">02</div>
       <div class="pe-body">
-        <div class="pe-title">APP MOBILE FINTECH <span class="pe-status dev">EM DEV</span></div>
-        <div class="pe-desc">Aplicativo mobile para gestão financeira pessoal com dashboard interativo e notificações inteligentes.</div>
+        <div class="pe-title">BARBERCORE <span class="pe-status dev">EM DEV</span></div>
+        <div class="pe-desc">CRM completo para barbearias com cadastro de clientes, disparo de mensagens, controle financeiro, estoque e agendamentos.</div>
         <div class="pe-tags">
-          <span class="pe-tag">FLUTTER</span>
-          <span class="pe-tag">SPRING</span>
-          <span class="pe-tag">MONGODB</span>
+          <span class="pe-tag">FASTAPI</span>
+          <span class="pe-tag">NODE.JS</span>
+          <span class="pe-tag">POSTGRESQL</span>
+          <span class="pe-tag">NEXT.JS</span>
         </div>
         <div class="pe-links">
-          <a href="#" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
+          <span class="pe-link pe-link-disabled">⚿ PRIVADO</span>
         </div>
       </div>
     </div>
@@ -1298,16 +1312,32 @@ html, body {
     <div class="project-entry">
       <div class="pe-num">03</div>
       <div class="pe-body">
-        <div class="pe-title">PAINEL DE MONITORAMENTO <span class="pe-status arch">ARQUIVADO</span></div>
-        <div class="pe-desc">Dashboard real-time para monitoramento de infraestrutura, logs e métricas de servidores Linux.</div>
+        <div class="pe-title">FORMATAI</div>
+        <div class="pe-desc">App mobile para transcrição de áudios e formatação inteligente em e-mails, listas e documentos. Voltado a usuários leigos que querem praticidade.</div>
         <div class="pe-tags">
-          <span class="pe-tag">VUE.JS</span>
+          <span class="pe-tag">FLUTTER</span>
+          <span class="pe-tag">OPENAI</span>
           <span class="pe-tag">NODE.JS</span>
-          <span class="pe-tag">LINUX</span>
-          <span class="pe-tag">NGINX</span>
+          <span class="pe-tag">PRISMA</span>
+          <span class="pe-tag">POSTGRESQL</span>
         </div>
         <div class="pe-links">
-          <a href="#" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
+          <a href="https://github.com/GabrielInacior/FormataAI" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-entry">
+      <div class="pe-num">04</div>
+      <div class="pe-body">
+        <div class="pe-title">ANKIANA</div>
+        <div class="pe-desc">App mobile de estudos com geração nativa de flashcards via IA, inspirado no Anki. Aprenda mais rápido com repetição espaçada inteligente.</div>
+        <div class="pe-tags">
+          <span class="pe-tag">FLUTTER</span>
+          <span class="pe-tag">IA</span>
+        </div>
+        <div class="pe-links">
+          <a href="https://github.com/GabrielInacior/AnkiAna" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
         </div>
       </div>
     </div>
