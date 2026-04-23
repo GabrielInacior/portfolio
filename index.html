@@ -1579,15 +1579,15 @@ html, body {
 <!-- PROJECTS Panel -->
 <div class="info-panel panel-animate panel-projects" id="panel-projects">
   <button class="panel-close" onclick="goToSection('hero')" aria-label="Fechar painel">&times;</button>
-  <div class="panel-tag">// PROJETOS</div>
-  <div class="panel-title" style="--glitch-delay:4.5s">CONSTRUÇÕES<br>DIGITAIS</div>
+  <div class="panel-tag" data-i18n="projects_tag">// PROJETOS</div>
+  <div class="panel-title" style="--glitch-delay:4.5s"><span data-i18n="projects_title_1">CONSTRUÇÕES</span><br><span data-i18n="projects_title_2">DIGITAIS</span></div>
 
   <div class="project-entries">
     <div class="project-entry">
       <div class="pe-num">01</div>
       <div class="pe-body">
-        <div class="pe-title">ATENDE360 <span class="pe-status prod">PRODUÇÃO</span></div>
-        <div class="pe-desc">Site corporativo com animações GSAP, painel admin completo e integração de IA para geração automática de blogposts.</div>
+        <div class="pe-title">ATENDE360 <span class="pe-status prod" data-i18n="proj_prod">PRODUÇÃO</span></div>
+        <div class="pe-desc" data-i18n="proj1_desc">Site corporativo com animações GSAP, painel admin completo e integração de IA para geração automática de blogposts.</div>
         <div class="pe-tags">
           <span class="pe-tag">NUXT</span>
           <span class="pe-tag">GSAP</span>
@@ -1598,8 +1598,8 @@ html, body {
           <span class="pe-tag">IA</span>
         </div>
         <div class="pe-links">
-          <a href="https://atn360.com.br/" target="_blank" rel="noopener" class="pe-link">↗ VER SITE</a>
-          <span class="pe-link pe-link-disabled">⚿ PRIVADO</span>
+          <a href="https://atn360.com.br/" target="_blank" rel="noopener" class="pe-link" data-i18n="proj_view_site">↗ VER SITE</a>
+          <span class="pe-link pe-link-disabled" data-i18n="proj_private">⚿ PRIVADO</span>
         </div>
       </div>
     </div>
@@ -1607,8 +1607,8 @@ html, body {
     <div class="project-entry">
       <div class="pe-num">02</div>
       <div class="pe-body">
-        <div class="pe-title">BARBERCORE <span class="pe-status dev">EM DEV</span></div>
-        <div class="pe-desc">CRM completo para barbearias com cadastro de clientes, disparo de mensagens, controle financeiro, estoque e agendamentos.</div>
+        <div class="pe-title">BARBERCORE <span class="pe-status dev" data-i18n="proj_in_dev">EM DEV</span></div>
+        <div class="pe-desc" data-i18n="proj2_desc">CRM completo para barbearias com cadastro de clientes, disparo de mensagens, controle financeiro, estoque e agendamentos.</div>
         <div class="pe-tags">
           <span class="pe-tag">FASTAPI</span>
           <span class="pe-tag">NODE.JS</span>
@@ -1616,7 +1616,7 @@ html, body {
           <span class="pe-tag">NEXT.JS</span>
         </div>
         <div class="pe-links">
-          <span class="pe-link pe-link-disabled">⚿ PRIVADO</span>
+          <span class="pe-link pe-link-disabled" data-i18n="proj_private">⚿ PRIVADO</span>
         </div>
       </div>
     </div>
@@ -1625,7 +1625,7 @@ html, body {
       <div class="pe-num">03</div>
       <div class="pe-body">
         <div class="pe-title">FORMATAI</div>
-        <div class="pe-desc">App mobile para transcrição de áudios e formatação inteligente em e-mails, listas e documentos. Voltado a usuários leigos que querem praticidade.</div>
+        <div class="pe-desc" data-i18n="proj3_desc">App mobile para transcrição de áudios e formatação inteligente em e-mails, listas e documentos. Voltado a usuários leigos que querem praticidade.</div>
         <div class="pe-tags">
           <span class="pe-tag">FLUTTER</span>
           <span class="pe-tag">OPENAI</span>
@@ -1643,7 +1643,7 @@ html, body {
       <div class="pe-num">04</div>
       <div class="pe-body">
         <div class="pe-title">ANKIANA</div>
-        <div class="pe-desc">App mobile de estudos com geração nativa de flashcards via IA, inspirado no Anki. Aprenda mais rápido com repetição espaçada inteligente.</div>
+        <div class="pe-desc" data-i18n="proj4_desc">App mobile de estudos com geração nativa de flashcards via IA, inspirado no Anki. Aprenda mais rápido com repetição espaçada inteligente.</div>
         <div class="pe-tags">
           <span class="pe-tag">FLUTTER</span>
           <span class="pe-tag">IA</span>
@@ -1659,9 +1659,9 @@ html, body {
 <!-- CONTACT Panel -->
 <div class="info-panel panel-animate panel-contact" id="panel-contact">
   <button class="panel-close" onclick="goToSection('hero')" aria-label="Fechar painel">&times;</button>
-  <div class="panel-tag">// CONTATO</div>
-  <div class="panel-title" style="--glitch-delay:3s">VAMOS<br>CONSTRUIR?</div>
-  <div class="panel-subtitle">Tem um projeto em mente? Vamos dar vida a ele juntos.</div>
+  <div class="panel-tag" data-i18n="contact_tag">// CONTATO</div>
+  <div class="panel-title" style="--glitch-delay:3s"><span data-i18n="contact_title_1">VAMOS</span><br><span data-i18n="contact_title_2">CONSTRUIR?</span></div>
+  <div class="panel-subtitle" data-i18n="contact_sub">Tem um projeto em mente? Vamos dar vida a ele juntos.</div>
 
   <div class="contact-links">
     <a href="mailto:gabrielinaciodev47@gmail.com" class="contact-link" aria-label="Enviar email para gabrielinaciodev47@gmail.com" onclick="copyEmail(event)">
@@ -1673,7 +1673,7 @@ html, body {
       <div class="contact-link-text">github.com/GabrielInacior</div>
     </a>
     <a href="https://linkedin.com/in/gabriel-in%C3%A1cio-rodrigues-silva-072029220" target="_blank" rel="noopener" class="contact-link" aria-label="LinkedIn de Gabriel Inácio">
-      <div class="contact-link-icon"><img src="https://cdn.simpleicons.org/linkedin/00f0ff" width="20" height="20" alt="LinkedIn"></div>
+      <div class="contact-link-icon">in</div>
       <div class="contact-link-text">linkedin.com/in/gabriel-inácio</div>
     </a>
   </div>
@@ -2814,7 +2814,18 @@ const TECH_DATA = {
       about_p3: 'Each building in this city represents a piece of what I know how to build. Each street, a connection between technologies I master. Welcome to my world.',
       stack_tag: '// TECHNOLOGIES', stack_title: 'MY ARSENAL',
       leg_fe: 'Frontend', leg_mob: 'Mobile', leg_be: 'Backend',
-      leg_db: 'Database', leg_cl: 'Cloud & Infra', leg_sec: 'Security'
+      leg_db: 'Database', leg_cl: 'Cloud & Infra', leg_sec: 'Security',
+      projects_tag: '// PROJECTS',
+      projects_title_1: 'DIGITAL', projects_title_2: 'BUILDS',
+      proj_prod: 'PRODUCTION', proj_in_dev: 'IN DEV',
+      proj_view_site: '↗ VIEW SITE', proj_private: '⚿ PRIVATE',
+      proj1_desc: 'Corporate website with GSAP animations, full admin panel and AI integration for automatic blog post generation.',
+      proj2_desc: 'Full CRM for barbershops with client management, message sending, financial control, inventory and scheduling.',
+      proj3_desc: 'Mobile app for audio transcription and smart formatting into emails, lists and documents. Built for everyday users who want practicality.',
+      proj4_desc: 'Mobile study app with native AI-generated flashcards, inspired by Anki. Learn faster with intelligent spaced repetition.',
+      contact_tag: '// CONTACT',
+      contact_title_1: "LET'S", contact_title_2: 'BUILD?',
+      contact_sub: 'Have a project in mind? Let\'s bring it to life together.'
     },
     pt: {
       loader_hint: 'PORTFOLIO 3D INTERATIVO',
@@ -2834,7 +2845,18 @@ const TECH_DATA = {
       about_p3: 'Cada pr\u00e9dio nessa cidade representa um peda\u00e7o do que sei construir. Cada rua, uma conex\u00e3o entre tecnologias que domino. Bem-vindo ao meu mundo.',
       stack_tag: '// TECNOLOGIAS', stack_title: 'MEU ARSENAL',
       leg_fe: 'Frontend', leg_mob: 'Mobile', leg_be: 'Backend',
-      leg_db: 'Banco de Dados', leg_cl: 'Cloud & Infra', leg_sec: 'Seguran\u00e7a'
+      leg_db: 'Banco de Dados', leg_cl: 'Cloud & Infra', leg_sec: 'Seguran\u00e7a',
+      projects_tag: '// PROJETOS',
+      projects_title_1: 'CONSTRU\u00c7\u00d5ES', projects_title_2: 'DIGITAIS',
+      proj_prod: 'PRODU\u00c7\u00c3O', proj_in_dev: 'EM DEV',
+      proj_view_site: '↗ VER SITE', proj_private: '⚿ PRIVADO',
+      proj1_desc: 'Site corporativo com anima\u00e7\u00f5es GSAP, painel admin completo e integra\u00e7\u00e3o de IA para gera\u00e7\u00e3o autom\u00e1tica de blogposts.',
+      proj2_desc: 'CRM completo para barbearias com cadastro de clientes, disparo de mensagens, controle financeiro, estoque e agendamentos.',
+      proj3_desc: 'App mobile para transcri\u00e7\u00e3o de \u00e1udios e formata\u00e7\u00e3o inteligente em e-mails, listas e documentos. Voltado a usu\u00e1rios leigos que querem praticidade.',
+      proj4_desc: 'App mobile de estudos com gera\u00e7\u00e3o nativa de flashcards via IA, inspirado no Anki. Aprenda mais r\u00e1pido com repeti\u00e7\u00e3o espa\u00e7ada inteligente.',
+      contact_tag: '// CONTATO',
+      contact_title_1: 'VAMOS', contact_title_2: 'CONSTRUIR?',
+      contact_sub: 'Tem um projeto em mente? Vamos dar vida a ele juntos.'
     }
   };
 
