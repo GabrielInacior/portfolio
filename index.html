@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Gabriel Inácio — Dev FullStack</title>
+<meta name="description" content="Portfólio de Gabriel Inácio, desenvolvedor FullStack com +5 anos de experiência em web, mobile, APIs e cloud. Vue, React, Node, Flutter e mais.">
+<meta name="theme-color" content="#00f0ff">
+<!-- Open Graph -->
+<meta property="og:type"        content="website">
+<meta property="og:title"       content="Gabriel Inácio — Dev FullStack">
+<meta property="og:description" content="Portfólio 3D interativo. FullStack Dev com +5 anos em frontend, backend, mobile e cloud.">
+<meta property="og:image"       content="assets/img/foto_teste.png">
+<meta property="og:url"         content="https://gabrielinacio.dev">
+<!-- Twitter Card -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Gabriel Inácio — Dev FullStack">
+<meta name="twitter:description" content="Portfólio 3D interativo. FullStack Dev com +5 anos de experiência.">
+<meta name="twitter:image"       content="assets/img/foto_teste.png">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/x-icon" href="assets/img/icone.ico">
 <style>
@@ -1292,6 +1305,44 @@ html, body {
   .photo-screen-topbar,
   .photo-screen-footer { font-size: 0.38rem; padding: 0.18rem 0.3rem; }
 }
+/* ── Toast de cópia de email ────────────────────────────────── */
+#copy-toast {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: rgba(0,240,255,0.12);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  padding: 0.5rem 1.2rem;
+  backdrop-filter: blur(10px);
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+#copy-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+/* ── WebGL fallback ─────────────────────────────────────────── */
+#webgl-fallback {
+  display: none;
+  position: fixed; inset: 0;
+  background: #050010;
+  color: var(--neon-cyan);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 99999;
+  padding: 2rem;
+}
+#webgl-fallback p { opacity: 0.6; margin-top: 0.5rem; font-size: 0.75rem; }
 </style>
 </head>
 <body>
@@ -1318,6 +1369,8 @@ html, body {
 <div class="tv-static" id="tvStatic"></div>
 <div class="vignette"></div>
 <div class="vhs-filter"></div>
+<div id="copy-toast">// EMAIL COPIADO ✓</div>
+<div id="webgl-fallback"><div>⚠ WebGL não disponível neste dispositivo.</div><p>Tente abrir em um browser moderno como Chrome ou Firefox.</p></div>
 
 <!-- ENTER CITY POPUP -->
 <div id="enterCity" class="enter-overlay">
@@ -1334,11 +1387,11 @@ html, body {
     <span></span><span></span><span></span>
   </button>
   <div class="nav-buttons" id="navButtons">
-    <button class="nav-btn active" onclick="goToSection('hero')"><span data-i18n="nav_home">INÍCIO</span></button>
-    <button class="nav-btn" onclick="goToSection('about')"><span data-i18n="nav_about">SOBRE</span></button>
-    <button class="nav-btn" onclick="goToSection('stack')"><span data-i18n="nav_stack">STACK</span></button>
-    <button class="nav-btn" onclick="goToSection('projects')"><span data-i18n="nav_projects">PROJETOS</span></button>
-    <button class="nav-btn" onclick="goToSection('contact')"><span data-i18n="nav_contact">CONTATO</span></button>
+    <button class="nav-btn active" onclick="goToSection('hero')" aria-label="Ir para Início"><span data-i18n="nav_home">INÍCIO</span></button>
+    <button class="nav-btn" onclick="goToSection('about')" aria-label="Ir para Sobre"><span data-i18n="nav_about">SOBRE</span></button>
+    <button class="nav-btn" onclick="goToSection('stack')" aria-label="Ir para Stack"><span data-i18n="nav_stack">STACK</span></button>
+    <button class="nav-btn" onclick="goToSection('projects')" aria-label="Ir para Projetos"><span data-i18n="nav_projects">PROJETOS</span></button>
+    <button class="nav-btn" onclick="goToSection('contact')" aria-label="Ir para Contato"><span data-i18n="nav_contact">CONTATO</span></button>
   </div>
 </nav>
 
@@ -1382,7 +1435,7 @@ html, body {
 
 <!-- ABOUT Panel -->
 <div class="info-panel panel-animate panel-about" id="panel-about">
-  <button class="panel-close" onclick="goToSection('hero')">&times;</button>
+  <button class="panel-close" onclick="goToSection('hero')" aria-label="Fechar painel">&times;</button>
   <div class="about-header">
     <div class="about-header-text">
       <div class="panel-tag" data-i18n="about_tag">// SOBRE MIM</div>
@@ -1394,7 +1447,7 @@ html, body {
         <span class="photo-screen-rec">REC</span>
       </div>
       <div class="photo-screen-img-wrap">
-        <img src="assets/img/foto_teste.png" alt="Gabriel">
+        <img src="assets/img/foto_teste.png" alt="Foto de Gabriel Inácio" loading="lazy">
       </div>
       <div class="photo-screen-footer">
         <span>[ ID: GABRIEL ]</span>
@@ -1413,7 +1466,7 @@ html, body {
 
 <!-- STACK Panel -->
 <div class="info-panel panel-animate panel-stack" id="panel-stack">
-  <button class="panel-close" onclick="goToSection('hero')">&times;</button>
+  <button class="panel-close" onclick="goToSection('hero')" aria-label="Fechar painel">&times;</button>
   <div class="panel-tag" data-i18n="stack_tag">// TECNOLOGIAS</div>
   <div class="panel-title" style="--glitch-delay:2s" data-i18n="stack_title">MEU ARSENAL</div>
 
@@ -1452,7 +1505,7 @@ html, body {
 
 <!-- PROJECTS Panel -->
 <div class="info-panel panel-animate panel-projects" id="panel-projects">
-  <button class="panel-close" onclick="goToSection('hero')">&times;</button>
+  <button class="panel-close" onclick="goToSection('hero')" aria-label="Fechar painel">&times;</button>
   <div class="panel-tag">// PROJETOS</div>
   <div class="panel-title" style="--glitch-delay:4.5s">CONSTRUÇÕES<br>DIGITAIS</div>
 
@@ -1472,6 +1525,7 @@ html, body {
           <span class="pe-tag">IA</span>
         </div>
         <div class="pe-links">
+          <a href="https://atn360.com.br/" target="_blank" rel="noopener" class="pe-link">↗ VER SITE</a>
           <span class="pe-link pe-link-disabled">⚿ PRIVADO</span>
         </div>
       </div>
@@ -1531,21 +1585,21 @@ html, body {
 
 <!-- CONTACT Panel -->
 <div class="info-panel panel-animate panel-contact" id="panel-contact">
-  <button class="panel-close" onclick="goToSection('hero')">&times;</button>
+  <button class="panel-close" onclick="goToSection('hero')" aria-label="Fechar painel">&times;</button>
   <div class="panel-tag">// CONTATO</div>
   <div class="panel-title" style="--glitch-delay:3s">VAMOS<br>CONSTRUIR?</div>
   <div class="panel-subtitle">Tem um projeto em mente? Vamos dar vida a ele juntos.</div>
 
   <div class="contact-links">
-    <a href="mailto:gabrielinaciodev47@gmail.com" class="contact-link">
+    <a href="mailto:gabrielinaciodev47@gmail.com" class="contact-link" aria-label="Enviar email para gabrielinaciodev47@gmail.com" onclick="copyEmail(event)">
       <div class="contact-link-icon">@</div>
       <div class="contact-link-text">gabrielinaciodev47@gmail.com</div>
     </a>
-    <a href="https://github.com/GabrielInacior" target="_blank" class="contact-link">
+    <a href="https://github.com/GabrielInacior" target="_blank" rel="noopener" class="contact-link" aria-label="GitHub de Gabriel Inácio">
       <div class="contact-link-icon">&lt;/&gt;</div>
       <div class="contact-link-text">github.com/GabrielInacior</div>
     </a>
-    <a href="https://linkedin.com/in/gabriel-in%C3%A1cio-rodrigues-silva-072029220" target="_blank" class="contact-link">
+    <a href="https://linkedin.com/in/gabriel-in%C3%A1cio-rodrigues-silva-072029220" target="_blank" rel="noopener" class="contact-link" aria-label="LinkedIn de Gabriel Inácio">
       <div class="contact-link-icon">in</div>
       <div class="contact-link-text">linkedin.com/in/gabriel-inácio</div>
     </a>
@@ -2736,6 +2790,39 @@ const TECH_DATA = {
   });
 
 })();
+</script>
+
+<script>
+// ── WebGL fallback ───────────────────────────────────────────
+(function() {
+  var c = document.createElement('canvas');
+  var ok = !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+  if (!ok) {
+    var fb = document.getElementById('webgl-fallback');
+    if (fb) fb.style.display = 'flex';
+  }
+})();
+
+// ── ESC fecha painel ─────────────────────────────────────────
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && window.goToSection) window.goToSection('hero');
+});
+
+// ── Copy email com toast ──────────────────────────────────────
+window.copyEmail = function(e) {
+  var email = 'gabrielinaciodev47@gmail.com';
+  if (navigator.clipboard) {
+    e.preventDefault();
+    navigator.clipboard.writeText(email).then(function() { showToast(); });
+  }
+  // se clipboard não disponível, deixa o mailto: agir normalmente
+};
+function showToast() {
+  var t = document.getElementById('copy-toast');
+  if (!t) return;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
 </script>
 </body>
 </html>
