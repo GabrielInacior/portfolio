@@ -257,7 +257,8 @@ html, body {
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.95);
   width: min(92vw, 800px);
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.2rem, 3vw, 2rem);
+  overflow: hidden;
 }
 .panel-stack.visible {
   transform: translate(-50%, -50%) scale(1);
@@ -266,7 +267,8 @@ html, body {
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.95);
   width: min(92vw, 850px);
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(1.2rem, 3vw, 2rem);
+  overflow: hidden;
 }
 .panel-projects.visible {
   transform: translate(-50%, -50%) scale(1);
@@ -499,6 +501,95 @@ html, body {
   letter-spacing: 0.05em;
 }
 
+/* Tech-badge cloud (Stack panel redesign) */
+.tech-legend {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  margin-top: 0.6rem; margin-bottom: 1rem;
+}
+.legend-dot {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-family: var(--font-mono); font-size: 0.55rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.legend-dot::before {
+  content: ''; display: block;
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.legend-dot.fe::before  { background: #00f0ff; }
+.legend-dot.mob::before { background: #f0ff00; }
+.legend-dot.be::before  { background: #ff00aa; }
+.legend-dot.db::before  { background: #66ffcc; }
+.legend-dot.cl::before  { background: #3399ff; }
+.legend-dot.sec::before { background: #ff3366; }
+
+.tech-cloud {
+  display: flex; flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tech-badge {
+  padding: 0.28rem 0.65rem;
+  font-family: var(--font-mono); font-size: 0.62rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: 1px solid; cursor: default;
+  transition: opacity 0.2s, transform 0.2s;
+  position: relative; overflow: hidden;
+}
+.tech-badge::after {
+  content: ''; position: absolute; inset: 0;
+  opacity: 0; transition: opacity 0.2s;
+}
+.tech-badge:hover { transform: translateY(-2px); opacity: 1 !important; }
+.tech-badge:hover::after { opacity: 0.08; background: currentColor; }
+.tech-badge.fe  { color: #00f0ff; border-color: rgba(0,240,255,0.4); }
+.tech-badge.mob { color: #f0ff00; border-color: rgba(240,255,0,0.4); }
+.tech-badge.be  { color: #ff00aa; border-color: rgba(255,0,170,0.4); }
+.tech-badge.db  { color: #66ffcc; border-color: rgba(102,255,204,0.4); }
+.tech-badge.cl  { color: #3399ff; border-color: rgba(51,153,255,0.4); }
+.tech-badge.sec { color: #ff3366; border-color: rgba(255,51,102,0.4); }
+
+/* Compact project entries (Projects panel redesign) */
+.project-entries {
+  display: flex; flex-direction: column;
+  gap: 0; margin-top: 0.8rem;
+}
+.project-entry {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  align-items: start;
+  gap: 0.6rem 0.8rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(0,240,255,0.07);
+  cursor: default;
+  transition: background 0.2s;
+}
+.project-entry:last-child { border-bottom: none; }
+.project-entry:hover { background: rgba(0,240,255,0.03); }
+.pe-num {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: var(--neon-magenta); letter-spacing: 0.05em;
+  padding-top: 0.2rem;
+}
+.pe-body {}
+.pe-title {
+  font-family: var(--font-display); font-size: 1.3rem;
+  color: #fff; letter-spacing: 0.04em; line-height: 1.1;
+  margin-bottom: 0.25rem;
+}
+.pe-desc {
+  font-size: 0.75rem; color: var(--text-secondary);
+  line-height: 1.5; margin-bottom: 0.4rem;
+}
+.pe-tags {
+  display: flex; flex-wrap: wrap; gap: 0.3rem;
+}
+.pe-tag {
+  font-family: var(--font-mono); font-size: 0.55rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(0,240,255,0.2);
+  color: var(--neon-cyan); letter-spacing: 0.04em;
+}
+
 /* Contact */
 .contact-links {
   display: flex; flex-direction: column;
@@ -690,47 +781,45 @@ html, body {
 /* ===== VHS FILTER OVERLAY ===== */
 .vhs-filter {
   position: fixed; inset: 0;
-  z-index: 88;
+  z-index: 9500;
   pointer-events: none;
-  /* dense scanlines */
   background: repeating-linear-gradient(
     0deg,
-    transparent 0,
-    transparent 3px,
-    rgba(0,0,0,0.09) 3px,
-    rgba(0,0,0,0.09) 4px
+    rgba(0,0,0,0.12) 0px,
+    rgba(0,0,0,0.12) 2px,
+    transparent 2px,
+    transparent 7px
   );
+  box-shadow: inset 0 0 100px rgba(0,0,0,0.4),
+              inset 0 0  40px rgba(0,0,0,0.15);
   animation: vhs-flicker 9s infinite;
 }
-
-/* Chromatic aberration via colour offset layers */
 .vhs-filter::before {
   content: '';
   position: absolute; inset: 0;
-  background: rgba(255, 0, 60, 0.018);
-  transform: translateX(-1.5px);
-  mix-blend-mode: screen;
+  background: rgba(255, 0, 60, 0.025);
+  transform: translateX(-2px);
 }
 .vhs-filter::after {
   content: '';
   position: absolute; inset: 0;
-  background: rgba(0, 180, 255, 0.018);
-  transform: translateX(1.5px);
-  mix-blend-mode: screen;
+  background: rgba(0, 180, 255, 0.025);
+  transform: translateX(2px);
 }
-
 @keyframes vhs-flicker {
-  0%,96%,100% { opacity:1; transform:none; }
-  96.4% { opacity:.82; transform:translateY(1px) scaleX(1.001); }
-  96.8% { opacity:1;  transform:none; }
-  97.2% { opacity:.9; transform:translateY(-1px); }
-  97.6% { opacity:1;  transform:none; }
+  0%,95%,100% { opacity:1; transform:none; }
+  95.5% { opacity:.82; transform:translateY(1px) scaleX(1.001); }
+  96.0% { opacity:1;   transform:none; }
+  96.8% { opacity:.9;  transform:translateY(-1px); filter:brightness(1.05); }
+  97.2% { opacity:1;   transform:none; filter:none; }
+  98.5% { opacity:.94; transform:translateX(.5px); }
+  99.0% { opacity:1;   transform:none; }
 }
 
 /* VHS scanning bar */
 .vhs-bar {
   position: fixed; inset: 0;
-  z-index: 91;
+  z-index: 9600;
   pointer-events: none;
   overflow: hidden;
 }
@@ -823,6 +912,117 @@ html, body {
 .hero-name {
   animation: glitch-hero 11s infinite;
 }
+/* ===== ENTER CITY POPUP ===== */
+.enter-overlay {
+  position: fixed; inset: 0; z-index: 9900;
+  background: rgba(2,0,10,0.96);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.8s ease, visibility 0.8s;
+}
+.enter-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.enter-overlay::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, rgba(0,240,255,0.03) 0, rgba(0,240,255,0.03) 1px,
+    transparent 1px, transparent 8px
+  );
+  pointer-events: none;
+}
+
+.enter-logo {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 6rem);
+  letter-spacing: 0.15em;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 60px rgba(0,240,255,0.6), 0 0 120px rgba(0,240,255,0.2);
+  animation: glitch-title 3s infinite;
+}
+.enter-logo span { color: var(--neon-magenta); }
+
+.enter-sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+  letter-spacing: 0.3em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.enter-btn {
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  letter-spacing: 0.25em;
+  color: #000;
+  background: var(--neon-cyan);
+  border: none;
+  padding: 1rem 3rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.3s;
+  box-shadow: 0 0 30px rgba(0,240,255,0.5), 0 0 80px rgba(0,240,255,0.15);
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.enter-btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.4s;
+}
+.enter-btn:hover { transform: scale(1.04); box-shadow: 0 0 50px rgba(0,240,255,0.8), 0 0 100px rgba(0,240,255,0.2); }
+.enter-btn:hover::before { transform: translateX(100%); }
+.enter-btn:active { transform: scale(0.97); }
+.enter-btn:disabled {
+  background: rgba(0,240,255,0.2);
+  color: rgba(0,240,255,0.5);
+  cursor: not-allowed;
+  box-shadow: none;
+  animation: enter-load 1.2s ease-in-out infinite;
+}
+@keyframes enter-load {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.9; }
+}
+
+.enter-note {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+/* ===== GSAP ANIMATION HELPERS ===== */
+.char { display: inline-block; }
+.word { display: inline-block; white-space: pre; }
+.line-reveal { overflow: hidden; }
+
+/* Panel elements start invisible for GSAP */
+.panel-animate .panel-tag,
+.panel-animate .panel-title,
+.panel-animate .panel-subtitle,
+.panel-animate .panel-body,
+.panel-animate .hero-role,
+.panel-animate .hero-stats,
+.panel-animate .tech-legend,
+.panel-animate .tech-badge,
+.panel-animate .project-entry,
+.panel-animate .contact-link {
+  opacity: 0;
+}
+
+/* Glitch bar — horizontal bar that sweeps text */
+.glitch-bar {
+  position: absolute; left: 0; width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-magenta), transparent);
+  pointer-events: none;
+  opacity: 0;
+}
 </style>
 </head>
 <body>
@@ -850,6 +1050,14 @@ html, body {
 <div class="vignette"></div>
 <div class="vhs-filter"></div>
 
+<!-- ENTER CITY POPUP -->
+<div id="enterCity" class="enter-overlay">
+  <div class="enter-logo">G<span>.</span>INÁCIO</div>
+  <div class="enter-sub">Cyberpunk Portfolio &bull; 3D Interactive City</div>
+  <button id="enterBtn" class="enter-btn">ENTRAR NA CIDADE</button>
+  <div class="enter-note">Ative o volume para experiência completa</div>
+</div>
+
 <!-- Nav HUD -->
 <nav class="nav-hud">
   <div class="logo">G<span>.</span>INÁCIO</div>
@@ -865,7 +1073,7 @@ html, body {
   </div>
 </nav>
 
-<audio id="bgMusic" src="music.mp3" loop preload="auto"></audio>
+<audio id="bgMusic" src="music.mp3" loop preload="auto" autoplay muted></audio>
 <div class="music-player" id="musicPlayer">
   <div class="music-eq">
     <span></span><span></span><span></span><span></span><span></span>
@@ -876,7 +1084,7 @@ html, body {
 </div>
 
 <!-- HERO Panel -->
-<div class="info-panel panel-hero" id="panel-hero">
+<div class="info-panel panel-animate panel-hero" id="panel-hero">
   <div class="panel-tag">// FULLSTACK DEVELOPER</div>
   <div class="hero-name">
     <div class="first">GABRIEL</div>
@@ -900,7 +1108,7 @@ html, body {
 </div>
 
 <!-- ABOUT Panel -->
-<div class="info-panel panel-about" id="panel-about">
+<div class="info-panel panel-animate panel-about" id="panel-about">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
   <div class="panel-tag">// SOBRE MIM</div>
   <div class="panel-title" style="--glitch-delay:0s">QUEM HABITA<br>ESSA CIDADE</div>
@@ -914,95 +1122,97 @@ html, body {
 </div>
 
 <!-- STACK Panel -->
-<div class="info-panel panel-stack" id="panel-stack">
+<div class="info-panel panel-animate panel-stack" id="panel-stack">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
   <div class="panel-tag">// TECNOLOGIAS</div>
   <div class="panel-title" style="--glitch-delay:2s">MEU ARSENAL</div>
 
-  <div class="stack-category">Frontend<span></span></div>
-  <div class="stack-grid">
-    <div class="stack-item"><div class="stack-item-name">React</div><div class="stack-item-type">UI Library</div></div>
-    <div class="stack-item"><div class="stack-item-name">Vue.js</div><div class="stack-item-type">Framework</div></div>
-    <div class="stack-item"><div class="stack-item-name">Next.js</div><div class="stack-item-type">React Meta</div></div>
-    <div class="stack-item"><div class="stack-item-name">Nuxt</div><div class="stack-item-type">Vue Meta</div></div>
+  <div class="tech-legend">
+    <span class="legend-dot fe">Frontend</span>
+    <span class="legend-dot mob">Mobile</span>
+    <span class="legend-dot be">Backend</span>
+    <span class="legend-dot db">Banco de Dados</span>
+    <span class="legend-dot cl">Cloud &amp; Infra</span>
+    <span class="legend-dot sec">Segurança</span>
   </div>
 
-  <div class="stack-category">Mobile<span></span></div>
-  <div class="stack-grid">
-    <div class="stack-item"><div class="stack-item-name">Flutter</div><div class="stack-item-type">Cross-platform</div></div>
-    <div class="stack-item"><div class="stack-item-name">React Native</div><div class="stack-item-type">Cross-platform</div></div>
-  </div>
-
-  <div class="stack-category">Backend<span></span></div>
-  <div class="stack-grid">
-    <div class="stack-item"><div class="stack-item-name">Node.js</div><div class="stack-item-type">Runtime</div></div>
-    <div class="stack-item"><div class="stack-item-name">Spring</div><div class="stack-item-type">Java Framework</div></div>
-    <div class="stack-item"><div class="stack-item-name">Prisma</div><div class="stack-item-type">ORM</div></div>
-  </div>
-
-  <div class="stack-category">Banco de Dados<span></span></div>
-  <div class="stack-grid">
-    <div class="stack-item"><div class="stack-item-name">PostgreSQL</div><div class="stack-item-type">Relacional</div></div>
-    <div class="stack-item"><div class="stack-item-name">MongoDB</div><div class="stack-item-type">NoSQL</div></div>
-  </div>
-
-  <div class="stack-category">Cloud & Infra<span></span></div>
-  <div class="stack-grid">
-    <div class="stack-item"><div class="stack-item-name">AWS</div><div class="stack-item-type">EC2, SNS, IAM</div></div>
-    <div class="stack-item"><div class="stack-item-name">Linux</div><div class="stack-item-type">Servers & Nginx</div></div>
-  </div>
-
-  <div class="stack-category">Segurança<span></span></div>
-  <div class="stack-grid">
-    <div class="stack-item"><div class="stack-item-name">Kali Linux</div><div class="stack-item-type">Pentest</div></div>
-    <div class="stack-item"><div class="stack-item-name">SQL Injection</div><div class="stack-item-type">Offensive Sec</div></div>
-    <div class="stack-item"><div class="stack-item-name">Brute Force</div><div class="stack-item-type">Attack Vector</div></div>
+  <div class="tech-cloud">
+    <span class="tech-badge fe">React</span>
+    <span class="tech-badge fe">Vue.js</span>
+    <span class="tech-badge fe">Next.js</span>
+    <span class="tech-badge fe">Nuxt</span>
+    <span class="tech-badge fe">TypeScript</span>
+    <span class="tech-badge mob">Flutter</span>
+    <span class="tech-badge mob">React Native</span>
+    <span class="tech-badge be">Node.js</span>
+    <span class="tech-badge be">Spring</span>
+    <span class="tech-badge be">Prisma</span>
+    <span class="tech-badge be">REST API</span>
+    <span class="tech-badge db">PostgreSQL</span>
+    <span class="tech-badge db">MongoDB</span>
+    <span class="tech-badge db">Redis</span>
+    <span class="tech-badge cl">AWS</span>
+    <span class="tech-badge cl">Linux</span>
+    <span class="tech-badge cl">Docker</span>
+    <span class="tech-badge cl">Nginx</span>
+    <span class="tech-badge sec">Kali Linux</span>
+    <span class="tech-badge sec">Pentest</span>
+    <span class="tech-badge sec">SQL Injection</span>
   </div>
 </div>
 
 <!-- PROJECTS Panel -->
-<div class="info-panel panel-projects" id="panel-projects">
+<div class="info-panel panel-animate panel-projects" id="panel-projects">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
   <div class="panel-tag">// PROJETOS</div>
   <div class="panel-title" style="--glitch-delay:4.5s">CONSTRUÇÕES<br>DIGITAIS</div>
 
-  <div class="projects-list">
-    <div class="project-card">
-      <div class="project-card-title">PLATAFORMA E-COMMERCE</div>
-      <div class="project-card-desc">Sistema completo de e-commerce com painel admin, integração de pagamentos e gestão de estoque em tempo real.</div>
-      <div class="project-tags">
-        <span class="project-tag">NEXT.JS</span>
-        <span class="project-tag">NODE.JS</span>
-        <span class="project-tag">POSTGRESQL</span>
-        <span class="project-tag">AWS</span>
+  <div class="project-entries">
+    <div class="project-entry">
+      <div class="pe-num">01</div>
+      <div class="pe-body">
+        <div class="pe-title">PLATAFORMA E-COMMERCE</div>
+        <div class="pe-desc">Sistema completo com painel admin, integração de pagamentos e gestão de estoque em tempo real.</div>
+        <div class="pe-tags">
+          <span class="pe-tag">NEXT.JS</span>
+          <span class="pe-tag">NODE.JS</span>
+          <span class="pe-tag">POSTGRESQL</span>
+          <span class="pe-tag">AWS</span>
+        </div>
       </div>
     </div>
 
-    <div class="project-card">
-      <div class="project-card-title">APP MOBILE FINTECH</div>
-      <div class="project-card-desc">Aplicativo mobile para gestão financeira pessoal com dashboard interativo e notificações inteligentes.</div>
-      <div class="project-tags">
-        <span class="project-tag">FLUTTER</span>
-        <span class="project-tag">SPRING</span>
-        <span class="project-tag">MONGODB</span>
+    <div class="project-entry">
+      <div class="pe-num">02</div>
+      <div class="pe-body">
+        <div class="pe-title">APP MOBILE FINTECH</div>
+        <div class="pe-desc">Aplicativo mobile para gestão financeira pessoal com dashboard interativo e notificações inteligentes.</div>
+        <div class="pe-tags">
+          <span class="pe-tag">FLUTTER</span>
+          <span class="pe-tag">SPRING</span>
+          <span class="pe-tag">MONGODB</span>
+        </div>
       </div>
     </div>
 
-    <div class="project-card">
-      <div class="project-card-title">PAINEL DE MONITORAMENTO</div>
-      <div class="project-card-desc">Dashboard real-time para monitoramento de infraestrutura, logs e métricas de performance de servidores Linux.</div>
-      <div class="project-tags">
-        <span class="project-tag">VUE.JS</span>
-        <span class="project-tag">NODE.JS</span>
-        <span class="project-tag">LINUX</span>
-        <span class="project-tag">NGINX</span>
+    <div class="project-entry">
+      <div class="pe-num">03</div>
+      <div class="pe-body">
+        <div class="pe-title">PAINEL DE MONITORAMENTO</div>
+        <div class="pe-desc">Dashboard real-time para monitoramento de infraestrutura, logs e métricas de servidores Linux.</div>
+        <div class="pe-tags">
+          <span class="pe-tag">VUE.JS</span>
+          <span class="pe-tag">NODE.JS</span>
+          <span class="pe-tag">LINUX</span>
+          <span class="pe-tag">NGINX</span>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- CONTACT Panel -->
-<div class="info-panel panel-contact" id="panel-contact">
+<div class="info-panel panel-animate panel-contact" id="panel-contact">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
   <div class="panel-tag">// CONTATO</div>
   <div class="panel-title" style="--glitch-delay:3s">VAMOS<br>CONSTRUIR?</div>
@@ -1061,13 +1271,35 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
-// Load nebula as sky sphere (proper 360° coverage)
-const texLoader = new THREE.TextureLoader();
-texLoader.load('background.jpg', (bgTex) => {
-  bgTex.colorSpace = THREE.SRGBColorSpace;
-  const skyGeo = new THREE.SphereGeometry(490, 64, 48);
-  const skyMat = new THREE.MeshBasicMaterial({ map: bgTex, side: THREE.BackSide });
-  scene.add(new THREE.Mesh(skyGeo, skyMat));
+// CubeTexture skybox
+const cubeLoader = new THREE.CubeTextureLoader();
+cubeLoader.setPath('skybox/');
+const skyboxTex = cubeLoader.load([
+  'skybox_right.png', 'skybox_left.png',
+  'skybox_up.png',    'skybox_down.png',
+  'skybox_front.png', 'skybox_back.png'
+]);
+skyboxTex.colorSpace = THREE.SRGBColorSpace;
+scene.background = skyboxTex;
+
+// Floating neon cubes — decorative ambience
+const _floatCubes = [];
+const _cubeData = [
+  { pos: [-14,  9, -7],  color: 0x00f0ff, size: 0.9, rs: [0.007,  0.012, 0.004] },
+  { pos: [ 18, 13, -18], color: 0xff00aa, size: 1.1, rs: [-0.005, 0.009, 0.007] },
+  { pos: [ -7, 16,  14], color: 0xf0ff00, size: 0.7, rs: [0.010, -0.006, 0.009] },
+  { pos: [ 22,  7,   9], color: 0x00f0ff, size: 1.3, rs: [0.004,  0.014,-0.005] },
+  { pos: [-19, 11,  19], color: 0xff00aa, size: 0.8, rs: [-0.008, 0.006, 0.011] },
+  { pos: [  5, 18, -28], color: 0xf0ff00, size: 1.0, rs: [0.006, -0.010, 0.008] },
+];
+_cubeData.forEach((d, idx) => {
+  const geo = new THREE.BoxGeometry(d.size, d.size, d.size);
+  const mat = new THREE.MeshBasicMaterial({ color: d.color, wireframe: true, transparent: true, opacity: 0.6 });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(d.pos[0], d.pos[1], d.pos[2]);
+  mesh.userData = { rs: d.rs, baseY: d.pos[1], phi: idx * 1.1 };
+  scene.add(mesh);
+  _floatCubes.push(mesh);
 });
 
 // ===================== LIGHTING — tuned for nebula (purple/pink/blue sky) =====================
@@ -1243,11 +1475,11 @@ function parseGLB(buffer) {
 const sections = ['hero', 'about', 'stack', 'projects', 'contact'];
 
 const waypoints = [
-  { pos: [30, 10, 30],   look: [0, 2, 0] },     // HERO — city skyline panorama
-  { pos: [0, 3, -15],    look: [0, 5, 10] },     // ABOUT — street corridor between buildings
-  { pos: [10, 15, 20],   look: [0, 0, 0] },      // STACK — elevated rooftop overview
-  { pos: [15, 5, -15],   look: [-5, 4, 5] },     // PROJECTS — corner with neon signs
-  { pos: [10, 4, 10],    look: [-5, 3, -5] },    // CONTACT — diagonal street view
+  { pos: [30, 10, 30],   look: [0, 2, 0]   },   // HERO     — panorama do skyline
+  { pos: [-30, 10, -25],  look: [0, 2, 0]   },   // ABOUT — canto oposto diagonal
+  { pos: [10, 15, 20],   look: [0, 0, 0]   },   // STACK    — rooftop elevado
+  { pos: [15, 5, -15],   look: [-5, 4, 5]  },   // PROJECTS — esquina com neons
+  { pos: [10, 4, 10],    look: [-5, 3, -5] },   // CONTACT  — rua diagonal
 ];
 
 let scrollProgress = 0;
@@ -1266,7 +1498,7 @@ document.addEventListener('wheel', (e) => {
   const delta = Math.sign(e.deltaY);
   scrollToSection(Math.round(targetProgress) + delta);
   scrollCooldown = true;
-  setTimeout(() => { scrollCooldown = false; }, 800);
+  setTimeout(() => { scrollCooldown = false; }, 1200);
 }, { passive: false });
 
 let touchStartY = 0;
@@ -1277,7 +1509,7 @@ document.addEventListener('touchend', (e) => {
     if (scrollCooldown) return;
     scrollToSection(Math.round(targetProgress) + Math.sign(deltaY));
     scrollCooldown = true;
-    setTimeout(() => { scrollCooldown = false; }, 800);
+    setTimeout(() => { scrollCooldown = false; }, 1200);
   }
 }, { passive: true });
 
@@ -1397,7 +1629,7 @@ function animate() {
   const elapsed = clock.getElapsedTime();
 
   // Smooth scroll
-  scrollProgress += (targetProgress - scrollProgress) * 0.04;
+  scrollProgress += (targetProgress - scrollProgress) * 0.022;
 
   const clampedProgress = Math.max(0, Math.min(scrollProgress, sections.length - 1.001));
   const state = getCameraState(clampedProgress);
@@ -1431,6 +1663,15 @@ function animate() {
   }
   particleGeo.attributes.position.needsUpdate = true;
 
+  // Animate floating cubes
+  _floatCubes.forEach((cube) => {
+    const ud = cube.userData;
+    cube.rotation.x += ud.rs[0];
+    cube.rotation.y += ud.rs[1];
+    cube.rotation.z += ud.rs[2];
+    cube.position.y = ud.baseY + Math.sin(elapsed * 0.6 + ud.phi) * 0.9;
+  });
+
   // Coords HUD
   const coordsEl = document.getElementById('coords');
   coordsEl.textContent = 'CAM: ' + camera.position.x.toFixed(1) + ', ' + camera.position.y.toFixed(1) + ', ' + camera.position.z.toFixed(1);
@@ -1450,7 +1691,7 @@ animate();
   const player = document.getElementById('musicPlayer');
   const vol    = document.getElementById('musicVol');
 
-  const TARGET_VOL = 0.08;
+  const TARGET_VOL = 0.09;
   audio.volume = TARGET_VOL;
   vol.value    = String(TARGET_VOL);
 
@@ -1469,22 +1710,257 @@ animate();
     }
   };
 
-  // Autoplay garantido: inicia mutado (browsers permitem), depois desmuta
+  // Autoplay garantido: <audio autoplay muted> já inicia tocando silenciosamente.
+  // startMusic() apenas desmuta quando a cena estiver pronta.
   window.startMusic = function() {
-    if (!audio.paused) return;
-    audio.muted = true;
-    audio.play().then(() => {
-      audio.muted  = false;
-      audio.volume = TARGET_VOL;
-      vol.value    = String(TARGET_VOL);
+    audio.muted  = false;
+    audio.volume = TARGET_VOL;
+    vol.value    = String(TARGET_VOL);
+    if (audio.paused) {
+      // fallback se autoplay foi bloqueado mesmo mudo
+      audio.play().then(() => setPlaying(true)).catch(() => {
+        status.textContent = 'CLIQUE ▶';
+      });
+    } else {
       setPlaying(true);
-    }).catch(() => {
-      audio.muted = false;
-      status.textContent = 'CLIQUE ▶';
-    });
+    }
   };
 
   vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
+})();
+</script>
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // ─── SCRAMBLE TEXT ───────────────────────────────────────────────────────
+  const CHARS = '#@!$%&<>[]{}|\\ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  function scramble(el, duration, delayMs) {
+    const finalHTML = el.innerHTML;
+    const finalText = el.innerText || el.textContent;
+    el.style.opacity = '1';
+    const steps = Math.max(12, Math.round(duration * 25));
+    let frame = 0;
+    setTimeout(function () {
+      var iv = setInterval(function () {
+        var progress = frame / steps;
+        var reveal = Math.floor(progress * finalText.length);
+        var out = '';
+        for (var i = 0; i < finalText.length; i++) {
+          var c = finalText[i];
+          if (c === '\n') { out += '<br>'; }
+          else if (!c.trim() || i < reveal) { out += c; }
+          else { out += CHARS[Math.floor(Math.random() * CHARS.length)]; }
+        }
+        el.innerHTML = out;
+        if (++frame > steps) { clearInterval(iv); el.innerHTML = finalHTML; }
+      }, 40);
+    }, delayMs);
+  }
+
+  // ─── COUNT UP ─────────────────────────────────────────────────────────────
+  function countUp(el, delayMs) {
+    var raw = el.textContent.trim();
+    if (raw === '∞') {
+      setTimeout(function () {
+        gsap.fromTo(el, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(2)' });
+      }, delayMs);
+      return;
+    }
+    var suffix = raw.replace(/[0-9]/g, '');
+    var num = parseInt(raw, 10);
+    el.textContent = '0' + suffix;
+    el.style.opacity = '1';
+    var proxy = { n: 0 };
+    setTimeout(function () {
+      gsap.to(proxy, { n: num, duration: 1.5, ease: 'power2.out',
+        onUpdate: function () { el.textContent = Math.floor(proxy.n) + suffix; }
+      });
+    }, delayMs);
+  }
+
+  // ─── TYPEWRITER ───────────────────────────────────────────────────────────
+  function typewriter(el, delayMs, speed) {
+    speed = speed || 16;
+    el.style.opacity = '1';
+    var txt = el.innerText || el.textContent;
+    el.textContent = '';
+    setTimeout(function () {
+      var i = 0;
+      var iv = setInterval(function () {
+        el.textContent = txt.slice(0, ++i);
+        if (i >= txt.length) clearInterval(iv);
+      }, speed);
+    }, delayMs);
+  }
+
+  // ─── PANEL ANIMATORS ──────────────────────────────────────────────────────
+  function animHero(panel) {
+    var tag       = panel.querySelector('.panel-tag');
+    var nameFirst = panel.querySelector('.hero-name .first');
+    var nameLast  = panel.querySelector('.hero-name .last');
+    var role      = panel.querySelector('.hero-role');
+    var statsWrap = panel.querySelector('.hero-stats');
+    var statNums  = panel.querySelectorAll('.stat-number');
+    var statLabels= panel.querySelectorAll('.stat-label');
+
+    if (tag) scramble(tag, 0.7, 0);
+
+    if (nameFirst) gsap.fromTo(nameFirst,
+      { opacity: 0, x: -100, skewX: -20 },
+      { opacity: 1, x: 0, skewX: 0, delay: 0.12, duration: 0.85, ease: 'expo.out' });
+    if (nameLast)  gsap.fromTo(nameLast,
+      { opacity: 0, x: 100, skewX: 20 },
+      { opacity: 1, x: 0, skewX: 0, delay: 0.28, duration: 0.85, ease: 'expo.out' });
+
+    if (role) typewriter(role, 700, 32);
+
+    if (statsWrap) statsWrap.style.opacity = '1';
+    statNums.forEach(function (el, i) { countUp(el, 1100 + i * 220); });
+    if (statLabels.length) gsap.fromTo(statLabels,
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, stagger: 0.15, delay: 1.35, duration: 0.4 });
+  }
+
+  function animAbout(panel) {
+    var tag   = panel.querySelector('.panel-tag');
+    var title = panel.querySelector('.panel-title');
+    var body  = panel.querySelector('.panel-body');
+    var paras = panel.querySelectorAll('.panel-body p');
+
+    if (tag)   scramble(tag, 0.7, 0);
+    if (title) scramble(title, 1.0, 280);
+    if (body)  body.style.opacity = '1';
+
+    paras.forEach(function (p, i) {
+      typewriter(p, 820 + i * 1300, 14);
+    });
+  }
+
+  function animStack(panel) {
+    var tag    = panel.querySelector('.panel-tag');
+    var title  = panel.querySelector('.panel-title');
+    var legend = panel.querySelector('.tech-legend');
+    var badges = panel.querySelectorAll('.tech-badge');
+
+    if (tag)   scramble(tag, 0.7, 0);
+    if (title) scramble(title, 0.9, 200);
+
+    if (legend) gsap.fromTo(legend,
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, delay: 0.7, duration: 0.4 });
+
+    gsap.fromTo(badges,
+      { opacity: 0, scale: 0.65, y: 10 },
+      { opacity: 1, scale: 1, y: 0,
+        stagger: { amount: 0.9, from: 'start' },
+        delay: 0.85, duration: 0.35, ease: 'back.out(1.7)' });
+  }
+
+  function animProjects(panel) {
+    var tag     = panel.querySelector('.panel-tag');
+    var title   = panel.querySelector('.panel-title');
+    var entries = panel.querySelectorAll('.project-entry');
+
+    if (tag)   scramble(tag, 0.7, 0);
+    if (title) scramble(title, 0.9, 300);
+
+    entries.forEach(function (entry, i) {
+      gsap.fromTo(entry,
+        { opacity: 0, x: -30 },
+        { opacity: 1, x: 0, delay: 0.6 + i * 0.18, duration: 0.55, ease: 'power3.out' });
+    });
+  }
+
+  function animContact(panel) {
+    var tag   = panel.querySelector('.panel-tag');
+    var title = panel.querySelector('.panel-title');
+    var sub   = panel.querySelector('.panel-subtitle');
+    var links = panel.querySelectorAll('.contact-link');
+
+    if (tag)   scramble(tag, 0.7, 0);
+    if (title) scramble(title, 0.9, 280);
+    if (sub)   gsap.fromTo(sub,
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, delay: 0.85, duration: 0.5, ease: 'power2.out' });
+    gsap.fromTo(links,
+      { opacity: 0, x: 55 },
+      { opacity: 1, x: 0, stagger: 0.12, delay: 1.05, duration: 0.5, ease: 'power3.out' });
+  }
+
+  var ANIMATORS = {
+    'panel-hero':     animHero,
+    'panel-about':    animAbout,
+    'panel-stack':    animStack,
+    'panel-projects': animProjects,
+    'panel-contact':  animContact
+  };
+
+  // ─── ENTER CITY POPUP ────────────────────────────────────────────────────
+  var overlay  = document.getElementById('enterCity');
+  var enterBtn = document.getElementById('enterBtn');
+  var enterNote= overlay ? overlay.querySelector('.enter-note') : null;
+
+  // Disable button & show loading state until scene is ready
+  if (enterBtn) { enterBtn.disabled = true; enterBtn.textContent = 'CARREGANDO...'; }
+
+  // Save the real startMusic defined in the music block above
+  var _origStart = window.startMusic;
+
+  // Intercept — three.js calls this when scene + city.glb is ready
+  window.startMusic = function () {
+    if (!enterBtn) { if (_origStart) _origStart(); return; }
+    enterBtn.disabled = false;
+    enterBtn.textContent = 'ENTRAR NA CIDADE';
+    if (enterNote) enterNote.textContent = 'Ative o volume para experiência completa';
+    // Pulse glow to signal readiness
+    gsap.fromTo(enterBtn,
+      { boxShadow: '0 0 30px rgba(0,240,255,0.5)' },
+      { boxShadow: '0 0 70px rgba(0,240,255,0.95), 0 0 140px rgba(0,240,255,0.35)',
+        repeat: -1, yoyo: true, duration: 0.75, ease: 'power2.inOut' });
+    // Subtle logo glitch
+    var logo = overlay.querySelector('.enter-logo');
+    if (logo) gsap.fromTo(logo, { skewX: 0 }, { skewX: 3, repeat: 5, yoyo: true, duration: 0.07 });
+  };
+
+  if (enterBtn) {
+    enterBtn.addEventListener('click', function () {
+      // Start audio
+      if (_origStart) _origStart();
+      // Kill button pulse
+      gsap.killTweensOf(enterBtn);
+      // Fade overlay out
+      gsap.to(overlay, {
+        opacity: 0, duration: 0.65, ease: 'power2.in',
+        onComplete: function () {
+          overlay.classList.add('hidden');
+          // Animate hero if already visible
+          var hero = document.getElementById('panel-hero');
+          if (hero && hero.classList.contains('visible')) animHero(hero);
+        }
+      });
+    });
+  }
+
+  // ─── MUTATION OBSERVER ────────────────────────────────────────────────────
+  document.querySelectorAll('.info-panel.panel-animate').forEach(function (panel) {
+    var done = false;
+    var obs = new MutationObserver(function () {
+      if (done || !panel.classList.contains('visible')) return;
+      done = true;
+      obs.disconnect();
+      var key = Object.keys(ANIMATORS).find(function (k) { return panel.classList.contains(k); });
+      if (!key) return;
+      // Hero: defer until overlay is dismissed (enter-city click handler triggers it)
+      if (key === 'panel-hero' && overlay && !overlay.classList.contains('hidden')) return;
+      setTimeout(function () { ANIMATORS[key](panel); }, 120);
+    });
+    obs.observe(panel, { attributes: true, attributeFilter: ['class'] });
+  });
+
 })();
 </script>
 </body>
