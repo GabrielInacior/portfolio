@@ -1450,8 +1450,9 @@ animate();
   const player = document.getElementById('musicPlayer');
   const vol    = document.getElementById('musicVol');
 
-  audio.volume = 0.07;
-  vol.value    = '0.07';
+  const TARGET_VOL = 0.08;
+  audio.volume = TARGET_VOL;
+  vol.value    = String(TARGET_VOL);
 
   function setPlaying(playing) {
     btn.textContent    = playing ? '⏸' : '▶';
@@ -1468,11 +1469,17 @@ animate();
     }
   };
 
-  // Called by Three.js when city finishes loading
+  // Autoplay garantido: inicia mutado (browsers permitem), depois desmuta
   window.startMusic = function() {
     if (!audio.paused) return;
-    audio.play().then(() => setPlaying(true)).catch(() => {
-      // Autoplay blocked — update label so user knows to click
+    audio.muted = true;
+    audio.play().then(() => {
+      audio.muted  = false;
+      audio.volume = TARGET_VOL;
+      vol.value    = String(TARGET_VOL);
+      setPlaying(true);
+    }).catch(() => {
+      audio.muted = false;
       status.textContent = 'CLIQUE ▶';
     });
   };
