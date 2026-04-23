@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Gabriel Inácio — Dev FullStack</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="assets/img/icone.ico">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -853,7 +854,11 @@ html, body {
   position: fixed; inset: 0;
   z-index: 89;
   pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.65) 100%);
+  background: radial-gradient(ellipse at center,
+    transparent 25%,
+    rgba(0,0,0,0.35) 55%,
+    rgba(0,0,0,0.82) 100%
+  );
 }
 
 /* ===== BOTTOM CONTROLS (music + lang) ===== */
@@ -970,35 +975,37 @@ html, body {
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0,0,0,0.12) 0px,
-    rgba(0,0,0,0.12) 2px,
+    rgba(0,0,0,0.22) 0px,
+    rgba(0,0,0,0.22) 2px,
     transparent 2px,
-    transparent 7px
+    transparent 6px
   );
-  box-shadow: inset 0 0 100px rgba(0,0,0,0.4),
-              inset 0 0  40px rgba(0,0,0,0.15);
-  animation: vhs-flicker 9s infinite;
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.55),
+              inset 0 0  50px rgba(0,0,0,0.25);
+  animation: vhs-flicker 7s infinite;
 }
 .vhs-filter::before {
   content: '';
   position: absolute; inset: 0;
-  background: rgba(255, 0, 60, 0.025);
+  background: rgba(255, 0, 60, 0.055);
   transform: translateX(-2px);
 }
 .vhs-filter::after {
   content: '';
   position: absolute; inset: 0;
-  background: rgba(0, 180, 255, 0.025);
+  background: rgba(0, 200, 255, 0.055);
   transform: translateX(2px);
 }
 @keyframes vhs-flicker {
-  0%,95%,100% { opacity:1; transform:none; }
-  95.5% { opacity:.82; transform:translateY(1px) scaleX(1.001); }
-  96.0% { opacity:1;   transform:none; }
-  96.8% { opacity:.9;  transform:translateY(-1px); filter:brightness(1.05); }
-  97.2% { opacity:1;   transform:none; filter:none; }
-  98.5% { opacity:.94; transform:translateX(.5px); }
-  99.0% { opacity:1;   transform:none; }
+  0%,88%,100% { opacity:1; transform:none; filter:none; }
+  89%  { opacity:.75; transform:translateY(2px) scaleX(1.002); }
+  89.5%{ opacity:1;   transform:none; }
+  91%  { opacity:.88; transform:translateY(-1px); filter:brightness(1.08); }
+  91.5%{ opacity:1;   transform:none; filter:none; }
+  94%  { opacity:.7;  transform:translateX(1px); filter:hue-rotate(10deg); }
+  94.5%{ opacity:1;   transform:none; filter:none; }
+  97%  { opacity:.92; transform:translateY(1px) scaleX(1.001); }
+  97.5%{ opacity:1;   transform:none; }
 }
 
 
@@ -1174,6 +1181,117 @@ html, body {
   pointer-events: none;
   opacity: 0;
 }
+/* ── ABOUT: layout com foto holográfica ─────────────────────── */
+/* ── ABOUT: layout título + foto ────────────────────────────── */
+.about-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+.about-header-text { flex: 1; min-width: 0; }
+
+/* CRT monitor / ID screen */
+.photo-screen {
+  flex-shrink: 0;
+  width: 140px;
+  font-family: var(--font-mono);
+  border: 1px solid var(--neon-cyan);
+  background: #020d10;
+  box-shadow: 0 0 14px rgba(0,240,255,0.25), inset 0 0 10px rgba(0,0,0,0.6);
+  animation: crtFlicker 9s step-end infinite;
+}
+@keyframes crtFlicker {
+  0%,88%,100% { opacity:1; filter:brightness(1); }
+  89%  { opacity:.82; }
+  90%  { opacity:1; }
+  92%  { opacity:.65; filter:brightness(1.1); }
+  92.4%{ opacity:1;  filter:brightness(1); }
+  96%  { opacity:.9; filter:brightness(1.15); }
+  96.5%{ opacity:1;  filter:brightness(1); }
+}
+.photo-screen-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.22rem 0.45rem;
+  background: rgba(0,240,255,0.07);
+  border-bottom: 1px solid rgba(0,240,255,0.18);
+  font-size: 0.45rem;
+  letter-spacing: 0.12em;
+  color: var(--neon-cyan);
+}
+.photo-screen-rec {
+  color: #ff3355;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.photo-screen-rec::before {
+  content: '●';
+  animation: recBlink 1.1s step-end infinite;
+}
+@keyframes recBlink {
+  0%,49%{ opacity:1; } 50%,100%{ opacity:0; }
+}
+.photo-screen-img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.photo-screen-img-wrap img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: top center;
+  filter: saturate(0.65) contrast(1.08) brightness(0.88);
+}
+/* Scanlines */
+.photo-screen-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px, transparent 2px,
+    rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+/* Vignette + cyan tint */
+.photo-screen-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.55) 100%),
+    linear-gradient(180deg, rgba(0,240,255,0.04) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+.photo-screen-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0.45rem;
+  background: rgba(0,240,255,0.05);
+  border-top: 1px solid rgba(0,240,255,0.15);
+  font-size: 0.42rem;
+  letter-spacing: 0.1em;
+  color: var(--neon-cyan);
+}
+.photo-cursor { animation: cursorBlink 1s step-end infinite; }
+@keyframes cursorBlink {
+  0%,49%{ opacity:1; } 50%,100%{ opacity:0; }
+}
+@media (max-width: 600px) {
+  .about-header { align-items: flex-start; }
+  .photo-screen { width: 80px; }
+  .photo-screen-topbar,
+  .photo-screen-footer { font-size: 0.38rem; padding: 0.18rem 0.3rem; }
+}
 </style>
 </head>
 <body>
@@ -1265,8 +1383,25 @@ html, body {
 <!-- ABOUT Panel -->
 <div class="info-panel panel-animate panel-about" id="panel-about">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
-  <div class="panel-tag" data-i18n="about_tag">// SOBRE MIM</div>
-  <div class="panel-title" style="--glitch-delay:0s"><span data-i18n="about_title_1">QUEM HABITA</span><br><span data-i18n="about_title_2">ESSA CIDADE</span></div>
+  <div class="about-header">
+    <div class="about-header-text">
+      <div class="panel-tag" data-i18n="about_tag">// SOBRE MIM</div>
+      <div class="panel-title" style="--glitch-delay:0s"><span data-i18n="about_title_1">QUEM HABITA</span><br><span data-i18n="about_title_2">ESSA CIDADE</span></div>
+    </div>
+    <div class="photo-screen">
+      <div class="photo-screen-topbar">
+        <span>CAM_01</span>
+        <span class="photo-screen-rec">REC</span>
+      </div>
+      <div class="photo-screen-img-wrap">
+        <img src="assets/img/foto_teste.png" alt="Gabriel">
+      </div>
+      <div class="photo-screen-footer">
+        <span>[ ID: GABRIEL ]</span>
+        <span class="photo-cursor">▌</span>
+      </div>
+    </div>
+  </div>
   <div class="panel-body">
     <p data-i18n="about_p1">Desenvolvedor FullStack com mais de 5 anos construindo aplicações que importam. Do frontend pixel-perfect ao backend robusto, passando por infraestrutura e segurança.</p>
     <br>
@@ -2093,6 +2228,83 @@ const TECH_DATA = {
     hRenderer.render(hScene, hCam);
   }
   animateHolo();
+})();
+
+// ===================== PHOTO HOLOGRAM (About panel) =====================
+(function initPhotoHologram() {
+  const wrap = document.getElementById('photoHoloWrap');
+  if (!wrap) return;
+
+  const pScene = new THREE.Scene();
+  const pCam = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  pCam.position.set(0, 0, 3.2);
+
+  const pRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  pRenderer.setSize(150, 150, false);
+  pRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  pRenderer.setClearColor(0x000000, 0);
+  wrap.appendChild(pRenderer.domElement);
+
+  // Photo texture on a plane
+  const photoTex = new THREE.TextureLoader().load('assets/img/foto_teste.png');
+  photoTex.colorSpace = THREE.SRGBColorSpace;
+
+  const pPlane = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2),
+    new THREE.MeshBasicMaterial({ map: photoTex, transparent: true })
+  );
+  pScene.add(pPlane);
+
+  // Neon wireframe border around the photo
+  const borderGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(2.08, 2.08, 0.01));
+  const borderMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.85 });
+  const border = new THREE.LineSegments(borderGeo, borderMat);
+  pScene.add(border);
+
+  // Second outer frame (magenta, slightly bigger)
+  const outerGeo = new THREE.EdgesGeometry(new THREE.BoxGeometry(2.22, 2.22, 0.01));
+  const outerMat = new THREE.LineBasicMaterial({ color: 0xff00aa, transparent: true, opacity: 0.35 });
+  const outerBorder = new THREE.LineSegments(outerGeo, outerMat);
+  pScene.add(outerBorder);
+
+  // Floating particles
+  const pPartCount = 35;
+  const pPartPos = new Float32Array(pPartCount * 3);
+  for (let i = 0; i < pPartCount; i++) {
+    pPartPos[i*3]   = (Math.random() - 0.5) * 4.5;
+    pPartPos[i*3+1] = (Math.random() - 0.5) * 4.5;
+    pPartPos[i*3+2] = (Math.random() - 0.5) * 1.5 - 0.5;
+  }
+  const pPartGeo = new THREE.BufferGeometry();
+  pPartGeo.setAttribute('position', new THREE.BufferAttribute(pPartPos, 3));
+  const pParts = new THREE.Points(pPartGeo, new THREE.PointsMaterial({ color: 0x00f0ff, size: 0.04, transparent: true, opacity: 0.45 }));
+  pScene.add(pParts);
+
+  // Neon lights
+  pScene.add(new THREE.AmbientLight(0xffffff, 1.2));
+  const lCyan = new THREE.PointLight(0x00f0ff, 3, 8);
+  lCyan.position.set(2, 2, 3); pScene.add(lCyan);
+  const lMag = new THREE.PointLight(0xff00aa, 2, 8);
+  lMag.position.set(-2, -1, 2); pScene.add(lMag);
+
+  function animPhoto() {
+    requestAnimationFrame(animPhoto);
+    const t = performance.now() * 0.001;
+    // Gentle float + tilt
+    pPlane.rotation.y = Math.sin(t * 0.55) * 0.18;
+    pPlane.rotation.x = Math.sin(t * 0.38) * 0.09;
+    pPlane.position.y = Math.sin(t * 0.72) * 0.06;
+    border.rotation.copy(pPlane.rotation);
+    border.position.copy(pPlane.position);
+    outerBorder.rotation.y = pPlane.rotation.y * 0.6;
+    outerBorder.rotation.x = pPlane.rotation.x * 0.6;
+    // Pulse border opacity
+    borderMat.opacity = 0.6 + Math.sin(t * 1.5) * 0.25;
+    // Slowly drift particles
+    pParts.rotation.z += 0.001;
+    pRenderer.render(pScene, pCam);
+  }
+  animPhoto();
 })();
 
 </script>
