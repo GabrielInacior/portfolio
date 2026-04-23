@@ -258,7 +258,7 @@ html, body {
   transform: translate(-50%, -50%) scale(0.95);
   width: min(92vw, 800px);
   padding: clamp(1.2rem, 3vw, 2rem);
-  overflow: hidden;
+  overflow-y: auto;
 }
 .panel-stack.visible {
   transform: translate(-50%, -50%) scale(1);
@@ -501,52 +501,123 @@ html, body {
   letter-spacing: 0.05em;
 }
 
-/* Tech-badge cloud (Stack panel redesign) */
-.tech-legend {
-  display: flex; flex-wrap: wrap; gap: 0.5rem;
-  margin-top: 0.6rem; margin-bottom: 1rem;
+/* ===== STACK PANEL REDESIGN — hologram + compact list ===== */
+.stack-layout {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 1rem;
 }
-.legend-dot {
-  display: flex; align-items: center; gap: 0.3rem;
-  font-family: var(--font-mono); font-size: 0.55rem;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-secondary);
-}
-.legend-dot::before {
-  content: ''; display: block;
-  width: 6px; height: 6px; border-radius: 50%;
-}
-.legend-dot.fe::before  { background: #00f0ff; }
-.legend-dot.mob::before { background: #f0ff00; }
-.legend-dot.be::before  { background: #ff00aa; }
-.legend-dot.db::before  { background: #66ffcc; }
-.legend-dot.cl::before  { background: #3399ff; }
-.legend-dot.sec::before { background: #ff3366; }
 
-.tech-cloud {
+/* Left: 3D hologram viewer */
+.holo-viewer {
+  flex: 0 0 220px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.6rem;
+}
+.holo-canvas-wrap {
+  width: 220px; height: 220px;
+  border: 1px solid rgba(0,240,255,0.2);
+  background: rgba(0,5,15,0.7);
+  position: relative;
+  overflow: hidden;
+}
+.holo-canvas-wrap::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg, rgba(0,240,255,0.02) 0, rgba(0,240,255,0.02) 1px,
+    transparent 1px, transparent 4px
+  );
+  pointer-events: none; z-index: 1;
+}
+.holo-canvas-wrap canvas { display: block; width: 100%; height: 100%; }
+.holo-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.1em;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 20px rgba(0,240,255,0.5);
+  text-align: center;
+}
+.holo-desc {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.holo-open-link {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid rgba(0,240,255,0.4);
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition: all 0.3s;
+  text-align: center;
+}
+.holo-open-link:hover {
+  background: rgba(0,240,255,0.1);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0,240,255,0.3);
+  color: #fff;
+}
+
+/* Right: compact tech list */
+.tech-list {
+  flex: 1;
   display: flex; flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.3rem;
+  align-content: flex-start;
+  max-height: 300px;
+  overflow-y: auto;
 }
-.tech-badge {
-  padding: 0.28rem 0.65rem;
-  font-family: var(--font-mono); font-size: 0.62rem;
+.tech-list::-webkit-scrollbar { width: 3px; }
+.tech-list::-webkit-scrollbar-track { background: transparent; }
+.tech-list::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 2px; }
+
+.tech-chip {
+  display: flex; align-items: center; gap: 0.45rem;
+  padding: 0.4rem 0.75rem;
+  font-family: var(--font-mono); font-size: 0.65rem;
   letter-spacing: 0.06em; text-transform: uppercase;
-  border: 1px solid; cursor: default;
-  transition: opacity 0.2s, transform 0.2s;
-  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.25s;
+  background: transparent;
+  white-space: nowrap;
 }
-.tech-badge::after {
-  content: ''; position: absolute; inset: 0;
-  opacity: 0; transition: opacity 0.2s;
+.tech-chip img, .tech-chip svg {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  object-fit: contain;
 }
-.tech-badge:hover { transform: translateY(-2px); opacity: 1 !important; }
-.tech-badge:hover::after { opacity: 0.08; background: currentColor; }
-.tech-badge.fe  { color: #00f0ff; border-color: rgba(0,240,255,0.4); }
-.tech-badge.mob { color: #f0ff00; border-color: rgba(240,255,0,0.4); }
-.tech-badge.be  { color: #ff00aa; border-color: rgba(255,0,170,0.4); }
-.tech-badge.db  { color: #66ffcc; border-color: rgba(102,255,204,0.4); }
-.tech-badge.cl  { color: #3399ff; border-color: rgba(51,153,255,0.4); }
-.tech-badge.sec { color: #ff3366; border-color: rgba(255,51,102,0.4); }
+.tech-chip:hover {
+  border-color: rgba(0,240,255,0.3);
+  color: #fff;
+  background: rgba(0,240,255,0.04);
+}
+.tech-chip.active {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: rgba(0,240,255,0.08);
+  box-shadow: 0 0 12px rgba(0,240,255,0.15);
+}
+
+@media (max-width: 768px) {
+  .stack-layout { flex-direction: column; align-items: center; gap: 0.8rem; }
+  .holo-viewer { flex: none; width: 100%; align-items: center; }
+  .holo-canvas-wrap { width: 160px; height: 160px; }
+  .tech-list { max-height: 180px; justify-content: center; }
+  .tech-chip { padding: 0.35rem 0.6rem; font-size: 0.6rem; cursor: pointer; }
+  .tech-chip img, .tech-chip svg { width: 16px; height: 16px; }
+  .holo-name { font-size: 1.1rem; }
+  .holo-open-link { cursor: pointer; }
+}
 
 /* Compact project entries (Projects panel redesign) */
 .project-entries {
@@ -588,6 +659,38 @@ html, body {
   padding: 0.15rem 0.45rem;
   border: 1px solid rgba(0,240,255,0.2);
   color: var(--neon-cyan); letter-spacing: 0.04em;
+}
+
+/* Project status badges */
+.pe-status {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.5rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid; margin-left: 0.6rem;
+  vertical-align: middle;
+}
+.pe-status.prod { color: #66ffcc; border-color: rgba(102,255,204,0.5); }
+.pe-status.dev  { color: #f0ff00; border-color: rgba(240,255,0,0.5); }
+.pe-status.arch { color: var(--text-secondary); border-color: rgba(136,136,170,0.4); }
+
+/* Project links */
+.pe-links {
+  display: flex; gap: 0.5rem; margin-top: 0.5rem;
+}
+.pe-link {
+  font-family: var(--font-mono); font-size: 0.55rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid rgba(0,240,255,0.25);
+  color: var(--neon-cyan);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.pe-link:hover {
+  border-color: var(--neon-cyan);
+  background: rgba(0,240,255,0.08);
+  box-shadow: 0 0 12px rgba(0,240,255,0.2);
 }
 
 /* Contact */
@@ -670,6 +773,20 @@ html, body {
   );
 }
 
+/* TV Static overlay */
+.tv-static {
+  position: fixed; inset: 0;
+  z-index: 91;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.05s;
+  mix-blend-mode: screen;
+}
+.tv-static canvas {
+  width: 100%; height: 100%;
+  image-rendering: pixelated;
+}
+
 /* Vignette */
 .vignette {
   position: fixed; inset: 0;
@@ -678,12 +795,17 @@ html, body {
   background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.65) 100%);
 }
 
-/* ===== MUSIC PLAYER (bottom-right fixed) ===== */
-.music-player {
+/* ===== BOTTOM CONTROLS (music + lang) ===== */
+.bottom-controls {
   position: fixed;
   bottom: 1.2rem;
   right: 1.2rem;
   z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.music-player {
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -773,9 +895,11 @@ html, body {
 }
 
 @media (max-width: 600px) {
-  .music-player { padding: 0.3rem 0.6rem; gap: 0.4rem; bottom: 0.8rem; right: 0.8rem; }
+  .bottom-controls { bottom: 0.8rem; right: 0.8rem; gap: 0.3rem; }
+  .music-player { padding: 0.3rem 0.6rem; gap: 0.4rem; }
   .music-vol { width: 38px; }
   .music-status { display: none; }
+  .lang-btn { padding: 0.3rem 0.5rem; cursor: pointer; }
 }
 
 /* ===== VHS FILTER OVERLAY ===== */
@@ -816,61 +940,6 @@ html, body {
   99.0% { opacity:1;   transform:none; }
 }
 
-/* VHS scanning bar */
-.vhs-bar {
-  position: fixed; inset: 0;
-  z-index: 9600;
-  pointer-events: none;
-  overflow: hidden;
-}
-.vhs-bar::before {
-  content: '';
-  position: absolute;
-  left: 0; right: 0; top: -8px;
-  height: 8px;
-  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.06), transparent);
-  animation: vhs-scan 10s linear infinite;
-}
-.vhs-bar::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: transparent;
-  animation: vhs-noise 18s infinite;
-}
-
-@keyframes vhs-scan {
-  0%   { top: -8px; }
-  100% { top: 100%; }
-}
-
-@keyframes vhs-noise {
-  0%, 88%, 100% { opacity: 0; }
-  89% {
-    opacity: 1;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(255,0,100,0.025) 3px,
-      rgba(255,0,100,0.025) 4px
-    );
-    transform: translateX(2px);
-  }
-  90% { opacity: 0; transform: none; }
-  93% {
-    opacity: 1;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 5px,
-      rgba(0,200,255,0.02) 5px,
-      rgba(0,200,255,0.02) 6px
-    );
-    transform: translateX(-2px);
-  }
-  94% { opacity: 0; transform: none; }
-}
 
 /* Glitch keyframes for panel titles */
 @keyframes glitch-panel {
@@ -1009,8 +1078,8 @@ html, body {
 .panel-animate .panel-body,
 .panel-animate .hero-role,
 .panel-animate .hero-stats,
-.panel-animate .tech-legend,
-.panel-animate .tech-badge,
+.panel-animate .holo-viewer,
+.panel-animate .tech-chip,
 .panel-animate .project-entry,
 .panel-animate .contact-link {
   opacity: 0;
@@ -1018,19 +1087,23 @@ html, body {
 
 .lang-btn {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.55rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
-  padding: 0.3rem 0.6rem;
-  background: transparent;
-  border: 1px solid var(--panel-border);
-  color: var(--text-secondary);
+  padding: 0.4rem 0.7rem;
+  background: rgba(6,0,15,0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,240,255,0.25);
+  color: var(--neon-cyan);
   cursor: pointer;
-  transition: all 0.3s;
-  pointer-events: all;
+  transition: all 0.2s;
+  flex-shrink: 0;
 }
 .lang-btn:hover {
   border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0,240,255,0.4);
+  color: #fff;
 }
 
 /* Glitch bar — horizontal bar that sweeps text */
@@ -1063,7 +1136,7 @@ html, body {
 
 <!-- Overlays -->
 <div class="scanlines"></div>
-<div class="vhs-bar"></div>
+<div class="tv-static" id="tvStatic"></div>
 <div class="vignette"></div>
 <div class="vhs-filter"></div>
 
@@ -1078,7 +1151,6 @@ html, body {
 <!-- Nav HUD -->
 <nav class="nav-hud">
   <div class="logo">G<span>.</span>INÁCIO</div>
-  <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
@@ -1092,14 +1164,17 @@ html, body {
 </nav>
 
 <audio id="bgMusic" preload="auto" autoplay muted></audio>
-<div class="music-player" id="musicPlayer">
-  <div class="music-eq">
-    <span></span><span></span><span></span><span></span><span></span>
+<div class="bottom-controls">
+  <button class="lang-btn" id="langToggle" onclick="toggleLang()">PT</button>
+  <div class="music-player" id="musicPlayer">
+    <div class="music-eq">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="music-status" id="musicStatus">AGUARDE</div>
+    <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play/Pause">▶</button>
+    <button class="music-btn" id="musicSkip" onclick="skipMusic()" title="Próxima música">⏭</button>
+    <input type="range" class="music-vol" id="musicVol" min="0" max="1" step="0.01" value="0.07" title="Volume">
   </div>
-  <div class="music-status" id="musicStatus">AGUARDE</div>
-  <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play/Pause">▶</button>
-  <button class="music-btn" id="musicSkip" onclick="skipMusic()" title="Próxima música">⏭</button>
-  <input type="range" class="music-vol" id="musicVol" min="0" max="1" step="0.01" value="0.07" title="Volume">
 </div>
 
 <!-- HERO Panel -->
@@ -1146,37 +1221,36 @@ html, body {
   <div class="panel-tag" data-i18n="stack_tag">// TECNOLOGIAS</div>
   <div class="panel-title" style="--glitch-delay:2s" data-i18n="stack_title">MEU ARSENAL</div>
 
-  <div class="tech-legend">
-    <span class="legend-dot fe" data-i18n="leg_fe">Frontend</span>
-    <span class="legend-dot mob" data-i18n="leg_mob">Mobile</span>
-    <span class="legend-dot be" data-i18n="leg_be">Backend</span>
-    <span class="legend-dot db" data-i18n="leg_db">Banco de Dados</span>
-    <span class="legend-dot cl" data-i18n="leg_cl">Cloud &amp; Infra</span>
-    <span class="legend-dot sec" data-i18n="leg_sec">Segurança</span>
-  </div>
+  <div class="stack-layout">
+    <!-- 3D Hologram Viewer -->
+    <div class="holo-viewer">
+      <div class="holo-canvas-wrap" id="holoCanvasWrap"></div>
+      <div class="holo-name" id="holoName">VUE.JS</div>
+      <div class="holo-desc" id="holoDesc">Progressive JS framework</div>
+      <a href="https://vuejs.org" target="_blank" rel="noopener" class="holo-open-link" id="holoLink">ABRIR LINK ↗</a>
+    </div>
 
-  <div class="tech-cloud">
-    <a href="https://react.dev" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/react/00f0ff" alt="">React</a>
-    <a href="https://vuejs.org" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/vuedotjs/00f0ff" alt="">Vue.js</a>
-    <a href="https://nextjs.org" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/nextdotjs/00f0ff" alt="">Next.js</a>
-    <a href="https://nuxt.com" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/nuxtdotjs/00f0ff" alt="">Nuxt</a>
-    <a href="https://typescriptlang.org" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/typescript/00f0ff" alt="">TypeScript</a>
-    <a href="https://flutter.dev" target="_blank" rel="noopener" class="tech-badge mob"><img class="tech-icon" src="https://cdn.simpleicons.org/flutter/f0ff00" alt="">Flutter</a>
-    <a href="https://reactnative.dev" target="_blank" rel="noopener" class="tech-badge mob"><img class="tech-icon" src="https://cdn.simpleicons.org/react/f0ff00" alt="">React Native</a>
-    <a href="https://nodejs.org" target="_blank" rel="noopener" class="tech-badge be"><img class="tech-icon" src="https://cdn.simpleicons.org/nodedotjs/ff00aa" alt="">Node.js</a>
-    <a href="https://spring.io" target="_blank" rel="noopener" class="tech-badge be"><img class="tech-icon" src="https://cdn.simpleicons.org/spring/ff00aa" alt="">Spring</a>
-    <a href="https://prisma.io" target="_blank" rel="noopener" class="tech-badge be"><img class="tech-icon" src="https://cdn.simpleicons.org/prisma/ff00aa" alt="">Prisma</a>
-    <a href="https://restfulapi.net" target="_blank" rel="noopener" class="tech-badge be"><svg class="tech-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>REST API</a>
-    <a href="https://postgresql.org" target="_blank" rel="noopener" class="tech-badge db"><img class="tech-icon" src="https://cdn.simpleicons.org/postgresql/66ffcc" alt="">PostgreSQL</a>
-    <a href="https://mongodb.com" target="_blank" rel="noopener" class="tech-badge db"><img class="tech-icon" src="https://cdn.simpleicons.org/mongodb/66ffcc" alt="">MongoDB</a>
-    <a href="https://redis.io" target="_blank" rel="noopener" class="tech-badge db"><img class="tech-icon" src="https://cdn.simpleicons.org/redis/66ffcc" alt="">Redis</a>
-    <a href="https://aws.amazon.com" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/amazonaws/3399ff" alt="">AWS</a>
-    <a href="https://kernel.org" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/linux/3399ff" alt="">Linux</a>
-    <a href="https://docker.com" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/docker/3399ff" alt="">Docker</a>
-    <a href="https://nginx.org" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/nginx/3399ff" alt="">Nginx</a>
-    <a href="https://kali.org" target="_blank" rel="noopener" class="tech-badge sec"><img class="tech-icon" src="https://cdn.simpleicons.org/kalilinux/ff3366" alt="">Kali Linux</a>
-    <a href="https://owasp.org" target="_blank" rel="noopener" class="tech-badge sec"><svg class="tech-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>Pentest</a>
-    <a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank" rel="noopener" class="tech-badge sec"><svg class="tech-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>SQL Injection</a>
+    <!-- Compact tech chips -->
+    <div class="tech-list" id="techList">
+      <div class="tech-chip" data-tech="react"><img src="https://cdn.simpleicons.org/react/00f0ff" alt="">React</div>
+      <div class="tech-chip active" data-tech="vuejs"><img src="https://cdn.simpleicons.org/vuedotjs/00f0ff" alt="">Vue.js</div>
+      <div class="tech-chip" data-tech="nextjs"><img src="https://cdn.simpleicons.org/nextdotjs/00f0ff" alt="">Next.js</div>
+      <div class="tech-chip" data-tech="nuxt"><img src="https://cdn.simpleicons.org/nuxtdotjs/00f0ff" alt="">Nuxt</div>
+      <div class="tech-chip" data-tech="typescript"><img src="https://cdn.simpleicons.org/typescript/00f0ff" alt="">TS</div>
+      <div class="tech-chip" data-tech="flutter"><img src="https://cdn.simpleicons.org/flutter/f0ff00" alt="">Flutter</div>
+      <div class="tech-chip" data-tech="reactnative"><img src="https://cdn.simpleicons.org/react/f0ff00" alt="">RN</div>
+      <div class="tech-chip" data-tech="nodejs"><img src="https://cdn.simpleicons.org/nodedotjs/ff00aa" alt="">Node</div>
+      <div class="tech-chip" data-tech="spring"><img src="https://cdn.simpleicons.org/spring/ff00aa" alt="">Spring</div>
+      <div class="tech-chip" data-tech="prisma"><img src="https://cdn.simpleicons.org/prisma/ff00aa" alt="">Prisma</div>
+      <div class="tech-chip" data-tech="postgresql"><img src="https://cdn.simpleicons.org/postgresql/66ffcc" alt="">Postgres</div>
+      <div class="tech-chip" data-tech="mongodb"><img src="https://cdn.simpleicons.org/mongodb/66ffcc" alt="">Mongo</div>
+      <div class="tech-chip" data-tech="redis"><img src="https://cdn.simpleicons.org/redis/66ffcc" alt="">Redis</div>
+      <div class="tech-chip" data-tech="aws"><img src="https://cdn.simpleicons.org/amazonaws/3399ff" alt="">AWS</div>
+      <div class="tech-chip" data-tech="linux"><img src="https://cdn.simpleicons.org/linux/3399ff" alt="">Linux</div>
+      <div class="tech-chip" data-tech="docker"><img src="https://cdn.simpleicons.org/docker/3399ff" alt="">Docker</div>
+      <div class="tech-chip" data-tech="nginx"><img src="https://cdn.simpleicons.org/nginx/3399ff" alt="">Nginx</div>
+      <div class="tech-chip" data-tech="kali"><img src="https://cdn.simpleicons.org/kalilinux/ff3366" alt="">Kali</div>
+    </div>
   </div>
 </div>
 
@@ -1190,7 +1264,7 @@ html, body {
     <div class="project-entry">
       <div class="pe-num">01</div>
       <div class="pe-body">
-        <div class="pe-title">PLATAFORMA E-COMMERCE</div>
+        <div class="pe-title">PLATAFORMA E-COMMERCE <span class="pe-status prod">PRODUÇÃO</span></div>
         <div class="pe-desc">Sistema completo com painel admin, integração de pagamentos e gestão de estoque em tempo real.</div>
         <div class="pe-tags">
           <span class="pe-tag">NEXT.JS</span>
@@ -1198,18 +1272,25 @@ html, body {
           <span class="pe-tag">POSTGRESQL</span>
           <span class="pe-tag">AWS</span>
         </div>
+        <div class="pe-links">
+          <a href="#" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
+          <a href="#" target="_blank" class="pe-link">◈ LIVE</a>
+        </div>
       </div>
     </div>
 
     <div class="project-entry">
       <div class="pe-num">02</div>
       <div class="pe-body">
-        <div class="pe-title">APP MOBILE FINTECH</div>
+        <div class="pe-title">APP MOBILE FINTECH <span class="pe-status dev">EM DEV</span></div>
         <div class="pe-desc">Aplicativo mobile para gestão financeira pessoal com dashboard interativo e notificações inteligentes.</div>
         <div class="pe-tags">
           <span class="pe-tag">FLUTTER</span>
           <span class="pe-tag">SPRING</span>
           <span class="pe-tag">MONGODB</span>
+        </div>
+        <div class="pe-links">
+          <a href="#" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
         </div>
       </div>
     </div>
@@ -1217,13 +1298,16 @@ html, body {
     <div class="project-entry">
       <div class="pe-num">03</div>
       <div class="pe-body">
-        <div class="pe-title">PAINEL DE MONITORAMENTO</div>
+        <div class="pe-title">PAINEL DE MONITORAMENTO <span class="pe-status arch">ARQUIVADO</span></div>
         <div class="pe-desc">Dashboard real-time para monitoramento de infraestrutura, logs e métricas de servidores Linux.</div>
         <div class="pe-tags">
           <span class="pe-tag">VUE.JS</span>
           <span class="pe-tag">NODE.JS</span>
           <span class="pe-tag">LINUX</span>
           <span class="pe-tag">NGINX</span>
+        </div>
+        <div class="pe-links">
+          <a href="#" target="_blank" class="pe-link">&lt;/&gt; GITHUB</a>
         </div>
       </div>
     </div>
@@ -1238,17 +1322,17 @@ html, body {
   <div class="panel-subtitle">Tem um projeto em mente? Vamos dar vida a ele juntos.</div>
 
   <div class="contact-links">
-    <a href="mailto:gabriel@email.com" class="contact-link">
+    <a href="mailto:gabrielinaciodev47@gmail.com" class="contact-link">
       <div class="contact-link-icon">@</div>
-      <div class="contact-link-text">gabriel@email.com</div>
+      <div class="contact-link-text">gabrielinaciodev47@gmail.com</div>
     </a>
-    <a href="https://github.com/gabrielinacio" target="_blank" class="contact-link">
+    <a href="https://github.com/GabrielInacior" target="_blank" class="contact-link">
       <div class="contact-link-icon">&lt;/&gt;</div>
-      <div class="contact-link-text">github.com/gabrielinacio</div>
+      <div class="contact-link-text">github.com/GabrielInacior</div>
     </a>
-    <a href="https://linkedin.com/in/gabrielinacio" target="_blank" class="contact-link">
+    <a href="https://linkedin.com/in/gabriel-in%C3%A1cio-rodrigues-silva-072029220" target="_blank" class="contact-link">
       <div class="contact-link-icon">in</div>
-      <div class="contact-link-text">linkedin.com/in/gabrielinacio</div>
+      <div class="contact-link-text">linkedin.com/in/gabriel-inácio</div>
     </a>
   </div>
 </div>
@@ -1376,38 +1460,14 @@ scene.add(groundBounce);
 // ===================== GROUND =====================
 const groundGeo = new THREE.PlaneGeometry(300, 300);
 
-// Procedural neon grid ground texture
-const groundCanvas = document.createElement('canvas');
-groundCanvas.width = groundCanvas.height = 512;
-const gCtx = groundCanvas.getContext('2d');
-gCtx.fillStyle = '#0f0818';
-gCtx.fillRect(0, 0, 512, 512);
-gCtx.strokeStyle = 'rgba(255,0,102,0.35)';
-gCtx.lineWidth = 1;
-const _gridStep = 32;
-for (let gi = 0; gi <= 512; gi += _gridStep) {
-  gCtx.beginPath(); gCtx.moveTo(gi, 0); gCtx.lineTo(gi, 512); gCtx.stroke();
-  gCtx.beginPath(); gCtx.moveTo(0, gi); gCtx.lineTo(512, gi); gCtx.stroke();
-}
-gCtx.fillStyle = 'rgba(255,0,170,0.6)';
-for (let gx = 0; gx <= 512; gx += _gridStep) {
-  for (let gy = 0; gy <= 512; gy += _gridStep) {
-    gCtx.beginPath(); gCtx.arc(gx, gy, 1.5, 0, Math.PI * 2); gCtx.fill();
-  }
-}
-for (let n = 0; n < 600; n++) {
-  const nx = Math.random() * 512;
-  const ny = Math.random() * 512;
-  const alpha = Math.random() * 0.08;
-  gCtx.fillStyle = `rgba(180,0,255,${alpha})`;
-  gCtx.fillRect(nx, ny, 1, 1);
-}
-const groundTex = new THREE.CanvasTexture(groundCanvas);
+// Use skybox_down image as ground texture
+const groundTexLoader = new THREE.TextureLoader();
+const groundTex = groundTexLoader.load('assets/skybox/skybox_down.png');
 groundTex.wrapS = groundTex.wrapT = THREE.RepeatWrapping;
-groundTex.repeat.set(20, 20);
+groundTex.repeat.set(1, 1);
 groundTex.colorSpace = THREE.SRGBColorSpace;
 
-const groundMat = new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.4, metalness: 0.6, color: 0xffffff });
+const groundMat = new THREE.MeshBasicMaterial({ map: groundTex });
 const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.rotation.x = -Math.PI / 2;
 ground.position.y = -0.5;
@@ -1419,6 +1479,28 @@ gridHelper.position.y = -0.4;
 gridHelper.material.opacity = 0.2;
 gridHelper.material.transparent = true;
 scene.add(gridHelper);
+
+// ===================== CYBERPUNK SUN =====================
+const sunGeo = new THREE.SphereGeometry(3, 32, 32);
+const sunMat = new THREE.MeshBasicMaterial({ color: 0xff2266 });
+const sunMesh = new THREE.Mesh(sunGeo, sunMat);
+scene.add(sunMesh);
+
+// Sun glow (larger transparent sphere)
+const sunGlowGeo = new THREE.SphereGeometry(6, 32, 32);
+const sunGlowMat = new THREE.MeshBasicMaterial({ color: 0xff0066, transparent: true, opacity: 0.15 });
+const sunGlow = new THREE.Mesh(sunGlowGeo, sunGlowMat);
+scene.add(sunGlow);
+
+// Sun outer halo
+const sunHaloGeo = new THREE.SphereGeometry(10, 32, 32);
+const sunHaloMat = new THREE.MeshBasicMaterial({ color: 0xff3388, transparent: true, opacity: 0.05 });
+const sunHalo = new THREE.Mesh(sunHaloGeo, sunHaloMat);
+scene.add(sunHalo);
+
+// Sun point light (casts colored light on city)
+const sunLight = new THREE.PointLight(0xff2266, 8, 200);
+scene.add(sunLight);
 
 // ===================== PARTICLES =====================
 const particleCount = 500;
@@ -1644,7 +1726,7 @@ function updateCursorRing() {
 }
 updateCursorRing();
 
-document.querySelectorAll('a, button, .nav-btn, .stack-item, .project-card, .contact-link').forEach(el => {
+document.querySelectorAll('a, button, .nav-btn, .stack-item, .project-card, .contact-link, .tech-chip').forEach(el => {
   el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
   el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
 });
@@ -1704,6 +1786,22 @@ function animate() {
     1.0
   );
 
+  // Cyberpunk sun orbit — lateral arc across the sky
+  const sunAngle = elapsed * 0.06;
+  const sunX = Math.cos(sunAngle) * 80;
+  const sunY = 35 + Math.sin(sunAngle * 0.3) * 10;
+  const sunZ = Math.sin(sunAngle) * 60;
+  sunMesh.position.set(sunX, sunY, sunZ);
+  sunGlow.position.copy(sunMesh.position);
+  sunHalo.position.copy(sunMesh.position);
+  sunLight.position.copy(sunMesh.position);
+  // Pulse sun glow
+  sunGlowMat.opacity = 0.12 + Math.sin(elapsed * 2) * 0.05;
+  sunHaloMat.opacity = 0.04 + Math.sin(elapsed * 1.3 + 1) * 0.02;
+  // Color shift between magenta and orange-red
+  const sunHue = (Math.sin(elapsed * 0.1) + 1) / 2;
+  sunMat.color.setRGB(1.0, 0.1 + sunHue * 0.3, 0.3 + sunHue * 0.2);
+
   // Float particles
   const positions = particleGeo.attributes.position.array;
   for (let i = 0; i < particleCount; i++) {
@@ -1719,6 +1817,241 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
+// ===================== HOLOGRAM 3D VIEWER =====================
+const TECH_DATA = {
+  react:       { name: 'React',       desc: 'Component-based UI library',   color: 0x00f0ff, url: 'https://react.dev',       icon: 'https://cdn.simpleicons.org/react/00f0ff' },
+  vuejs:       { name: 'Vue.js',      desc: 'Progressive JS framework',     color: 0x00f0ff, url: 'https://vuejs.org',       icon: 'https://cdn.simpleicons.org/vuedotjs/00f0ff' },
+  nextjs:      { name: 'Next.js',     desc: 'React SSR/SSG framework',      color: 0x00f0ff, url: 'https://nextjs.org',      icon: 'https://cdn.simpleicons.org/nextdotjs/00f0ff' },
+  nuxt:        { name: 'Nuxt',        desc: 'Vue SSR/SSG framework',        color: 0x00f0ff, url: 'https://nuxt.com',        icon: 'https://cdn.simpleicons.org/nuxtdotjs/00f0ff' },
+  typescript:  { name: 'TypeScript',  desc: 'Typed JavaScript superset',    color: 0x00f0ff, url: 'https://typescriptlang.org', icon: 'https://cdn.simpleicons.org/typescript/00f0ff' },
+  flutter:     { name: 'Flutter',     desc: 'Cross-platform mobile SDK',    color: 0xf0ff00, url: 'https://flutter.dev',     icon: 'https://cdn.simpleicons.org/flutter/f0ff00' },
+  reactnative: { name: 'React Native',desc: 'Native mobile with React',     color: 0xf0ff00, url: 'https://reactnative.dev', icon: 'https://cdn.simpleicons.org/react/f0ff00' },
+  nodejs:      { name: 'Node.js',     desc: 'Server-side JS runtime',       color: 0xff00aa, url: 'https://nodejs.org',      icon: 'https://cdn.simpleicons.org/nodedotjs/ff00aa' },
+  spring:      { name: 'Spring',      desc: 'Java enterprise framework',    color: 0xff00aa, url: 'https://spring.io',       icon: 'https://cdn.simpleicons.org/spring/ff00aa' },
+  prisma:      { name: 'Prisma',      desc: 'Next-gen ORM for Node.js',     color: 0xff00aa, url: 'https://prisma.io',       icon: 'https://cdn.simpleicons.org/prisma/ff00aa' },
+  postgresql:  { name: 'PostgreSQL',  desc: 'Advanced relational database', color: 0x66ffcc, url: 'https://postgresql.org',  icon: 'https://cdn.simpleicons.org/postgresql/66ffcc' },
+  mongodb:     { name: 'MongoDB',     desc: 'NoSQL document database',      color: 0x66ffcc, url: 'https://mongodb.com',     icon: 'https://cdn.simpleicons.org/mongodb/66ffcc' },
+  redis:       { name: 'Redis',       desc: 'In-memory data store',         color: 0x66ffcc, url: 'https://redis.io',        icon: 'https://cdn.simpleicons.org/redis/66ffcc' },
+  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://cdn.simpleicons.org/amazonaws/3399ff' },
+  linux:       { name: 'Linux',       desc: 'Open-source operating system', color: 0x3399ff, url: 'https://kernel.org',      icon: 'https://cdn.simpleicons.org/linux/3399ff' },
+  docker:      { name: 'Docker',      desc: 'Container platform',           color: 0x3399ff, url: 'https://docker.com',      icon: 'https://cdn.simpleicons.org/docker/3399ff' },
+  nginx:       { name: 'Nginx',       desc: 'High-perf web server / proxy', color: 0x3399ff, url: 'https://nginx.org',       icon: 'https://cdn.simpleicons.org/nginx/3399ff' },
+  kali:        { name: 'Kali Linux',  desc: 'Penetration testing distro',   color: 0xff3366, url: 'https://kali.org',        icon: 'https://cdn.simpleicons.org/kalilinux/ff3366' },
+};
+
+(function initHologram() {
+  const wrap = document.getElementById('holoCanvasWrap');
+  if (!wrap) return;
+
+  // Mini Three.js scene for the hologram
+  const hScene = new THREE.Scene();
+  const hCam = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  hCam.position.set(0, 0, 3.5);
+
+  const hRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  hRenderer.setSize(220, 220);
+  hRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  hRenderer.setClearColor(0x000000, 0);
+  hRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+  hRenderer.toneMappingExposure = 1.5;
+  wrap.appendChild(hRenderer.domElement);
+
+  // Lighting — brighter for clear cube visibility
+  const hAmbient = new THREE.AmbientLight(0x8888cc, 3);
+  hScene.add(hAmbient);
+  const hPoint = new THREE.PointLight(0x00f0ff, 8, 30);
+  hPoint.position.set(3, 3, 4);
+  hScene.add(hPoint);
+  const hPoint2 = new THREE.PointLight(0xff00aa, 5, 20);
+  hPoint2.position.set(-3, -2, 3);
+  hScene.add(hPoint2);
+  const hPointTop = new THREE.PointLight(0xffffff, 3, 20);
+  hPointTop.position.set(0, 4, 0);
+  hScene.add(hPointTop);
+
+  // Cube
+  const hGeo = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+
+  // Wireframe overlay
+  const hWireGeo = new THREE.BoxGeometry(1.6, 1.6, 1.6);
+  const hWireMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, wireframe: true, transparent: true, opacity: 0.2 });
+  const hWire = new THREE.Mesh(hWireGeo, hWireMat);
+  hScene.add(hWire);
+
+  // The solid cube — brighter emissive, map will override color
+  const hMat = new THREE.MeshStandardMaterial({
+    color: 0x222244,
+    roughness: 0.2,
+    metalness: 0.7,
+    emissive: 0x00f0ff,
+    emissiveIntensity: 0.4,
+  });
+  const hCube = new THREE.Mesh(hGeo, hMat);
+  hScene.add(hCube);
+
+  // Floating particles around the cube
+  const hPartCount = 60;
+  const hPartGeo = new THREE.BufferGeometry();
+  const hPartPos = new Float32Array(hPartCount * 3);
+  for (let i = 0; i < hPartCount; i++) {
+    hPartPos[i*3]   = (Math.random()-0.5)*4;
+    hPartPos[i*3+1] = (Math.random()-0.5)*4;
+    hPartPos[i*3+2] = (Math.random()-0.5)*4;
+  }
+  hPartGeo.setAttribute('position', new THREE.BufferAttribute(hPartPos, 3));
+  const hPartMat = new THREE.PointsMaterial({ color: 0x00f0ff, size: 0.03, transparent: true, opacity: 0.5 });
+  const hParts = new THREE.Points(hPartGeo, hPartMat);
+  hScene.add(hParts);
+
+  // Icon texture cache
+  const textureCache = {};
+
+  function makeTextTexture(name, colorHex) {
+    const c = document.createElement('canvas');
+    c.width = c.height = 256;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#080818';
+    ctx.fillRect(0, 0, 256, 256);
+    // Grid
+    ctx.strokeStyle = 'rgba(0,240,255,0.05)';
+    ctx.lineWidth = 0.5;
+    for (let g = 0; g < 256; g += 16) {
+      ctx.beginPath(); ctx.moveTo(g, 0); ctx.lineTo(g, 256); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, g); ctx.lineTo(256, g); ctx.stroke();
+    }
+    // Tech name as text
+    ctx.fillStyle = colorHex || '#00f0ff';
+    ctx.font = 'bold 36px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = colorHex || '#00f0ff';
+    ctx.shadowBlur = 20;
+    ctx.fillText(name, 128, 128);
+    // Border
+    ctx.shadowBlur = 8;
+    ctx.strokeStyle = colorHex || '#00f0ff';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(8, 8, 240, 240);
+    const tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  }
+
+  async function loadIconTexture(url, colorHex, name) {
+    const cacheKey = url + colorHex;
+    if (textureCache[cacheKey]) return textureCache[cacheKey];
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('fetch failed');
+      let svgText = await resp.text();
+      // Force SVG dimensions for consistent rendering
+      svgText = svgText.replace(/<svg/, '<svg width="128" height="128"');
+      const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+      const blobUrl = URL.createObjectURL(blob);
+      const img = new Image();
+      await new Promise((res, rej) => {
+        img.onload = res;
+        img.onerror = rej;
+        img.src = blobUrl;
+      });
+      const c = document.createElement('canvas');
+      c.width = c.height = 256;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#080818';
+      ctx.fillRect(0, 0, 256, 256);
+      // Grid lines
+      ctx.strokeStyle = 'rgba(0,240,255,0.05)';
+      ctx.lineWidth = 0.5;
+      for (let g = 0; g < 256; g += 16) {
+        ctx.beginPath(); ctx.moveTo(g, 0); ctx.lineTo(g, 256); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, g); ctx.lineTo(256, g); ctx.stroke();
+      }
+      // Icon
+      const s = 140;
+      ctx.drawImage(img, (256-s)/2, (256-s)/2, s, s);
+      // Glow border
+      ctx.shadowColor = colorHex || '#00f0ff';
+      ctx.shadowBlur = 15;
+      ctx.strokeStyle = colorHex || '#00f0ff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(8, 8, 240, 240);
+      URL.revokeObjectURL(blobUrl);
+      const tex = new THREE.CanvasTexture(c);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      textureCache[cacheKey] = tex;
+      return tex;
+    } catch (e) {
+      // Fallback: text-based texture
+      const tex = makeTextTexture(name, colorHex);
+      textureCache[cacheKey] = tex;
+      return tex;
+    }
+  }
+
+  // Select tech
+  let currentTech = 'vuejs';
+  const nameEl = document.getElementById('holoName');
+  const descEl = document.getElementById('holoDesc');
+  const linkEl = document.getElementById('holoLink');
+
+  async function selectTech(key) {
+    const data = TECH_DATA[key];
+    if (!data) return;
+    currentTech = key;
+
+    // Update UI
+    nameEl.textContent = data.name;
+    descEl.textContent = data.desc;
+    linkEl.href = data.url;
+
+    // Update colors
+    const c = new THREE.Color(data.color);
+    hPoint.color.copy(c);
+    hWireMat.color.copy(c);
+    hPartMat.color.copy(c);
+    hMat.emissive.copy(c);
+
+    // Load icon texture onto cube faces
+    const colorStr = '#' + c.getHexString();
+    const tex = await loadIconTexture(data.icon, colorStr, data.name);
+    if (tex && currentTech === key) {
+      hMat.map = tex;
+      hMat.needsUpdate = true;
+    }
+
+    // Update active chip
+    document.querySelectorAll('.tech-chip').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.tech === key);
+    });
+  }
+
+  // Initialize with Vue.js
+  selectTech('vuejs');
+
+  // Click handlers
+  document.querySelectorAll('.tech-chip').forEach(chip => {
+    chip.addEventListener('click', () => selectTech(chip.dataset.tech));
+  });
+
+  // Animation
+  const hClock = new THREE.Clock();
+  function animateHolo() {
+    requestAnimationFrame(animateHolo);
+    const t = hClock.getElapsedTime();
+    hCube.rotation.y = t * 0.5;
+    hCube.rotation.x = Math.sin(t * 0.3) * 0.15;
+    hWire.rotation.copy(hCube.rotation);
+    // Float bob
+    hCube.position.y = Math.sin(t * 0.8) * 0.1;
+    hWire.position.y = hCube.position.y;
+    // Particle drift
+    hParts.rotation.y = t * 0.15;
+    hParts.rotation.x = t * 0.08;
+    hRenderer.render(hScene, hCam);
+  }
+  animateHolo();
+})();
 
 </script>
 
@@ -1806,6 +2139,51 @@ animate();
   };
 
   vol.addEventListener('input', () => { audio.volume = parseFloat(vol.value); });
+})();
+</script>
+
+
+<script>
+// ===== TV STATIC EFFECT =====
+(function() {
+  var container = document.getElementById('tvStatic');
+  var canvas = document.createElement('canvas');
+  canvas.width = 128; canvas.height = 96;
+  container.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+
+  function drawStatic() {
+    var imgData = ctx.createImageData(128, 96);
+    var d = imgData.data;
+    for (var i = 0; i < d.length; i += 4) {
+      var v = Math.random() * 255;
+      d[i] = d[i+1] = d[i+2] = v;
+      d[i+3] = 40 + Math.random() * 60;
+    }
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  function burst() {
+    var duration = 80 + Math.random() * 150;
+    var frames = Math.ceil(duration / 33);
+    var frame = 0;
+    container.style.opacity = '0.25';
+    var iv = setInterval(function() {
+      drawStatic();
+      if (++frame >= frames) {
+        clearInterval(iv);
+        container.style.opacity = '0';
+      }
+    }, 33);
+    scheduleNext();
+  }
+
+  function scheduleNext() {
+    var delay = 4000 + Math.random() * 12000;
+    setTimeout(burst, delay);
+  }
+
+  scheduleNext();
 })();
 </script>
 
@@ -1927,21 +2305,21 @@ animate();
   function animStack(panel) {
     var tag    = panel.querySelector('.panel-tag');
     var title  = panel.querySelector('.panel-title');
-    var legend = panel.querySelector('.tech-legend');
-    var badges = panel.querySelectorAll('.tech-badge');
+    var viewer = panel.querySelector('.holo-viewer');
+    var chips  = panel.querySelectorAll('.tech-chip');
 
     if (tag)   scramble(tag, 0.7, 0);
     if (title) scramble(title, 0.9, 200);
 
-    if (legend) gsap.fromTo(legend,
-      { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, delay: 0.7, duration: 0.4 });
+    if (viewer) gsap.fromTo(viewer,
+      { opacity: 0, scale: 0.8, y: 20 },
+      { opacity: 1, scale: 1, y: 0, delay: 0.6, duration: 0.6, ease: 'power3.out' });
 
-    gsap.fromTo(badges,
-      { opacity: 0, scale: 0.65, y: 10 },
+    gsap.fromTo(chips,
+      { opacity: 0, scale: 0.65, y: 8 },
       { opacity: 1, scale: 1, y: 0,
-        stagger: { amount: 0.9, from: 'start' },
-        delay: 0.85, duration: 0.35, ease: 'back.out(1.7)' });
+        stagger: { amount: 0.7, from: 'start' },
+        delay: 0.8, duration: 0.3, ease: 'back.out(1.5)' });
   }
 
   function animProjects(panel) {
@@ -2028,6 +2406,64 @@ animate();
       });
     });
   }
+
+  // ─── i18n SYSTEM ─────────────────────────────────────────────────────────
+  var currentLang = 'pt';
+  var TRANSLATIONS = {
+    en: {
+      loader_hint: '3D INTERACTIVE PORTFOLIO',
+      enter_sub: 'Cyberpunk Portfolio \u2022 3D Interactive City',
+      enter_btn: 'ENTER THE CITY',
+      enter_note: 'Turn on volume for the full experience',
+      nav_home: 'HOME', nav_about: 'ABOUT', nav_stack: 'STACK',
+      nav_projects: 'PROJECTS', nav_contact: 'CONTACT',
+      hero_tag: '// FULLSTACK DEVELOPER',
+      hero_role: '> FullStack Dev \u2022 +3 years of experience',
+      stat_years: 'Years of XP', stat_techs: 'Technologies', stat_curiosity: 'Curiosity',
+      about_tag: '// ABOUT ME',
+      about_title_1: 'WHO INHABITS', about_title_2: 'THIS CITY',
+      about_p1: 'FullStack Developer with over 3 years building applications that matter. From pixel-perfect frontend to robust backend, through infrastructure and security.',
+      about_p2: 'My approach combines clean code with smart architecture. I have experience with web and mobile applications, scalable APIs, cloud deployments and security best practices \u2014 including pentest knowledge with Kali Linux.',
+      about_p3: 'Each building in this city represents a piece of what I know how to build. Each street, a connection between technologies I master. Welcome to my world.',
+      stack_tag: '// TECHNOLOGIES', stack_title: 'MY ARSENAL',
+      leg_fe: 'Frontend', leg_mob: 'Mobile', leg_be: 'Backend',
+      leg_db: 'Database', leg_cl: 'Cloud & Infra', leg_sec: 'Security'
+    },
+    pt: {
+      loader_hint: 'PORTFOLIO 3D INTERATIVO',
+      enter_sub: 'Cyberpunk Portfolio \u2022 3D Interactive City',
+      enter_btn: 'ENTRAR NA CIDADE',
+      enter_note: 'Ative o volume para experi\u00eancia completa',
+      nav_home: 'IN\u00cdCIO', nav_about: 'SOBRE', nav_stack: 'STACK',
+      nav_projects: 'PROJETOS', nav_contact: 'CONTATO',
+      hero_tag: '// FULLSTACK DEVELOPER',
+      hero_role: '> Dev FullStack \u2022 +3 anos de experi\u00eancia',
+      stat_years: 'Anos de XP', stat_techs: 'Tecnologias', stat_curiosity: 'Curiosidade',
+      about_tag: '// SOBRE MIM',
+      about_title_1: 'QUEM HABITA', about_title_2: 'ESSA CIDADE',
+      about_p1: 'Desenvolvedor FullStack com mais de 3 anos construindo aplica\u00e7\u00f5es que importam. Do frontend pixel-perfect ao backend robusto, passando por infraestrutura e seguran\u00e7a.',
+      about_p2: 'Minha abordagem combina c\u00f3digo limpo com arquitetura inteligente. Tenho experi\u00eancia com aplica\u00e7\u00f5es web e mobile, APIs escal\u00e1veis, deploy em cloud e boas pr\u00e1ticas de seguran\u00e7a \u2014 incluindo conhecimento em pentest com Kali Linux.',
+      about_p3: 'Cada pr\u00e9dio nessa cidade representa um peda\u00e7o do que sei construir. Cada rua, uma conex\u00e3o entre tecnologias que domino. Bem-vindo ao meu mundo.',
+      stack_tag: '// TECNOLOGIAS', stack_title: 'MEU ARSENAL',
+      leg_fe: 'Frontend', leg_mob: 'Mobile', leg_be: 'Backend',
+      leg_db: 'Banco de Dados', leg_cl: 'Cloud & Infra', leg_sec: 'Seguran\u00e7a'
+    }
+  };
+
+  window.toggleLang = function() {
+    currentLang = currentLang === 'pt' ? 'en' : 'pt';
+    var langBtn = document.getElementById('langToggle');
+    if (langBtn) langBtn.textContent = currentLang === 'pt' ? 'PT' : 'EN';
+    var dict = TRANSLATIONS[currentLang];
+    document.querySelectorAll('[data-i18n]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n');
+      if (dict[key] != null) {
+        if (el.tagName === 'INPUT') el.value = dict[key];
+        else el.textContent = dict[key];
+      }
+    });
+    document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : 'en';
+  };
 
   // ─── MUTATION OBSERVER ────────────────────────────────────────────────────
   document.querySelectorAll('.info-panel.panel-animate').forEach(function (panel) {
