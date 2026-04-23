@@ -585,9 +585,45 @@ html, body {
   max-height: 300px;
   overflow-y: auto;
 }
-.tech-list::-webkit-scrollbar { width: 3px; }
-.tech-list::-webkit-scrollbar-track { background: transparent; }
-.tech-list::-webkit-scrollbar-thumb { background: rgba(0,240,255,0.2); border-radius: 2px; }
+/* Custom scrollbars — panels */
+.info-panel::-webkit-scrollbar,
+.panel-stack::-webkit-scrollbar,
+.panel-projects::-webkit-scrollbar,
+.panel-contact::-webkit-scrollbar,
+.tech-list::-webkit-scrollbar { width: 4px; }
+
+.info-panel::-webkit-scrollbar-track,
+.panel-stack::-webkit-scrollbar-track,
+.panel-projects::-webkit-scrollbar-track,
+.panel-contact::-webkit-scrollbar-track,
+.tech-list::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.03);
+  border-radius: 4px;
+}
+
+.info-panel::-webkit-scrollbar-thumb,
+.panel-stack::-webkit-scrollbar-thumb,
+.panel-projects::-webkit-scrollbar-thumb,
+.panel-contact::-webkit-scrollbar-thumb,
+.tech-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--neon-cyan), var(--neon-magenta));
+  border-radius: 4px;
+  opacity: 0.6;
+}
+
+.info-panel::-webkit-scrollbar-thumb:hover,
+.panel-stack::-webkit-scrollbar-thumb:hover,
+.panel-projects::-webkit-scrollbar-thumb:hover,
+.panel-contact::-webkit-scrollbar-thumb:hover,
+.tech-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--neon-magenta), var(--neon-cyan));
+}
+
+/* Firefox */
+.info-panel, .panel-stack, .panel-projects, .panel-contact, .tech-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon-cyan) rgba(255,255,255,0.03);
+}
 
 .tech-chip {
   display: flex; align-items: center; gap: 0.45rem;
@@ -1209,10 +1245,10 @@ html, body {
     <div class="first">GABRIEL</div>
     <div class="last">INÁCIO</div>
   </div>
-  <div class="hero-role" data-i18n="hero_role">&gt; Dev FullStack &bull; +3 anos de experiência</div>
+  <div class="hero-role" data-i18n="hero_role">&gt; Dev FullStack &bull; +5 anos de experiência</div>
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-number">3+</div>
+      <div class="stat-number">5+</div>
       <div class="stat-label" data-i18n="stat_years">Anos de XP</div>
     </div>
     <div class="stat">
@@ -1232,7 +1268,7 @@ html, body {
   <div class="panel-tag" data-i18n="about_tag">// SOBRE MIM</div>
   <div class="panel-title" style="--glitch-delay:0s"><span data-i18n="about_title_1">QUEM HABITA</span><br><span data-i18n="about_title_2">ESSA CIDADE</span></div>
   <div class="panel-body">
-    <p data-i18n="about_p1">Desenvolvedor FullStack com mais de 3 anos construindo aplicações que importam. Do frontend pixel-perfect ao backend robusto, passando por infraestrutura e segurança.</p>
+    <p data-i18n="about_p1">Desenvolvedor FullStack com mais de 5 anos construindo aplicações que importam. Do frontend pixel-perfect ao backend robusto, passando por infraestrutura e segurança.</p>
     <br>
     <p data-i18n="about_p2">Minha abordagem combina código limpo com arquitetura inteligente. Tenho experiência com aplicações web e mobile, APIs escaláveis, deploy em cloud e boas práticas de segurança — incluindo conhecimento em pentest com Kali Linux.</p>
     <br>
@@ -1270,7 +1306,7 @@ html, body {
       <div class="tech-chip" data-tech="postgresql"><img src="https://cdn.simpleicons.org/postgresql/66ffcc" alt="">Postgres</div>
       <div class="tech-chip" data-tech="mongodb"><img src="https://cdn.simpleicons.org/mongodb/66ffcc" alt="">Mongo</div>
       <div class="tech-chip" data-tech="redis"><img src="https://cdn.simpleicons.org/redis/66ffcc" alt="">Redis</div>
-      <div class="tech-chip" data-tech="aws"><img src="https://cdn.simpleicons.org/amazon/3399ff" alt="">AWS</div>
+      <div class="tech-chip" data-tech="aws"><img src="https://api.iconify.design/simple-icons/amazonwebservices.svg?color=%233399ff" alt="">AWS</div>
       <div class="tech-chip" data-tech="linux"><img src="https://cdn.simpleicons.org/linux/3399ff" alt="">Linux</div>
       <div class="tech-chip" data-tech="docker"><img src="https://cdn.simpleicons.org/docker/3399ff" alt="">Docker</div>
       <div class="tech-chip" data-tech="nginx"><img src="https://cdn.simpleicons.org/nginx/3399ff" alt="">Nginx</div>
@@ -1617,6 +1653,8 @@ function scrollToSection(index) {
 }
 
 document.addEventListener('wheel', (e) => {
+  // Allow native scroll inside open panels
+  if (e.target.closest('.info-panel')) return;
   e.preventDefault();
   if (scrollCooldown) return;
   const delta = Math.sign(e.deltaY);
@@ -1788,33 +1826,33 @@ function animate(now) {
     showSection(roundedSection);
   }
 
-  // Skip heavy rendering when a panel covers the scene
-  if (panelIsOpen) return;
+  // Skip expensive cosmetic updates when panel covers the scene, but always render
+  if (!panelIsOpen) {
+    // Pulse accent lights
+    accentPink.intensity = 6 + Math.sin(elapsed * 1.2) * 2;
+    accentCyan.intensity = 6 + Math.sin(elapsed * 0.9 + 1) * 2;
+    accentPurple.intensity = 5 + Math.sin(elapsed * 0.7 + 2) * 1;
 
-  // Pulse accent lights
-  accentPink.intensity = 6 + Math.sin(elapsed * 1.2) * 2;
-  accentCyan.intensity = 6 + Math.sin(elapsed * 0.9 + 1) * 2;
-  accentPurple.intensity = 5 + Math.sin(elapsed * 0.7 + 2) * 1;
+    // Cyberpunk sun orbit
+    const sunAngle = elapsed * 0.06;
+    sunMesh.position.set(Math.cos(sunAngle) * 80, 35 + Math.sin(sunAngle * 0.3) * 10, Math.sin(sunAngle) * 60);
+    sunGlow.position.copy(sunMesh.position);
+    sunLight.position.copy(sunMesh.position);
 
-  // Cyberpunk sun orbit
-  const sunAngle = elapsed * 0.06;
-  sunMesh.position.set(Math.cos(sunAngle) * 80, 35 + Math.sin(sunAngle * 0.3) * 10, Math.sin(sunAngle) * 60);
-  sunGlow.position.copy(sunMesh.position);
-  sunLight.position.copy(sunMesh.position);
-
-  // Float particles — update every other frame to halve CPU cost
-  if (frameCount % 2 === 0) {
-    const positions = particleGeo.attributes.position.array;
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3 + 1] += Math.sin(elapsed * 0.3 + i) * 0.003;
+    // Float particles — update every other frame to halve CPU cost
+    if (frameCount % 2 === 0) {
+      const positions = particleGeo.attributes.position.array;
+      for (let i = 0; i < particleCount; i++) {
+        positions[i * 3 + 1] += Math.sin(elapsed * 0.3 + i) * 0.003;
+      }
+      particleGeo.attributes.position.needsUpdate = true;
     }
-    particleGeo.attributes.position.needsUpdate = true;
-  }
 
-  // Coords HUD — update only every 10 frames
-  if (frameCount % 10 === 0) {
-    const coordsEl = document.getElementById('coords');
-    coordsEl.textContent = 'CAM: ' + camera.position.x.toFixed(1) + ', ' + camera.position.y.toFixed(1) + ', ' + camera.position.z.toFixed(1);
+    // Coords HUD — update only every 10 frames
+    if (frameCount % 10 === 0) {
+      const coordsEl = document.getElementById('coords');
+      coordsEl.textContent = 'CAM: ' + camera.position.x.toFixed(1) + ', ' + camera.position.y.toFixed(1) + ', ' + camera.position.z.toFixed(1);
+    }
   }
 
   renderer.render(scene, camera);
@@ -1836,7 +1874,7 @@ const TECH_DATA = {
   postgresql:  { name: 'PostgreSQL',  desc: 'Advanced relational database', color: 0x66ffcc, url: 'https://postgresql.org',  icon: 'https://cdn.simpleicons.org/postgresql/66ffcc' },
   mongodb:     { name: 'MongoDB',     desc: 'NoSQL document database',      color: 0x66ffcc, url: 'https://mongodb.com',     icon: 'https://cdn.simpleicons.org/mongodb/66ffcc' },
   redis:       { name: 'Redis',       desc: 'In-memory data store',         color: 0x66ffcc, url: 'https://redis.io',        icon: 'https://cdn.simpleicons.org/redis/66ffcc' },
-  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://cdn.simpleicons.org/amazon/3399ff' },
+  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://api.iconify.design/simple-icons/amazonwebservices.svg?color=%233399ff' },
   linux:       { name: 'Linux',       desc: 'Open-source operating system', color: 0x3399ff, url: 'https://kernel.org',      icon: 'https://cdn.simpleicons.org/linux/3399ff' },
   docker:      { name: 'Docker',      desc: 'Container platform',           color: 0x3399ff, url: 'https://docker.com',      icon: 'https://cdn.simpleicons.org/docker/3399ff' },
   nginx:       { name: 'Nginx',       desc: 'High-perf web server / proxy', color: 0x3399ff, url: 'https://nginx.org',       icon: 'https://cdn.simpleicons.org/nginx/3399ff' },
@@ -2422,11 +2460,11 @@ const TECH_DATA = {
       nav_home: 'HOME', nav_about: 'ABOUT', nav_stack: 'STACK',
       nav_projects: 'PROJECTS', nav_contact: 'CONTACT',
       hero_tag: '// FULLSTACK DEVELOPER',
-      hero_role: '> FullStack Dev \u2022 +3 years of experience',
+      hero_role: '> FullStack Dev \u2022 +5 years of experience',
       stat_years: 'Years of XP', stat_techs: 'Technologies', stat_curiosity: 'Curiosity',
       about_tag: '// ABOUT ME',
       about_title_1: 'WHO INHABITS', about_title_2: 'THIS CITY',
-      about_p1: 'FullStack Developer with over 3 years building applications that matter. From pixel-perfect frontend to robust backend, through infrastructure and security.',
+      about_p1: 'FullStack Developer with over 5 years building applications that matter. From pixel-perfect frontend to robust backend, through infrastructure and security.',
       about_p2: 'My approach combines clean code with smart architecture. I have experience with web and mobile applications, scalable APIs, cloud deployments and security best practices \u2014 including pentest knowledge with Kali Linux.',
       about_p3: 'Each building in this city represents a piece of what I know how to build. Each street, a connection between technologies I master. Welcome to my world.',
       stack_tag: '// TECHNOLOGIES', stack_title: 'MY ARSENAL',
