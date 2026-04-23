@@ -1016,6 +1016,23 @@ html, body {
   opacity: 0;
 }
 
+.lang-btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.6rem;
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.3s;
+  pointer-events: all;
+}
+.lang-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
 /* Glitch bar — horizontal bar that sweeps text */
 .glitch-bar {
   position: absolute; left: 0; width: 100%; height: 2px;
@@ -1038,7 +1055,7 @@ html, body {
     <div class="loader-bar" id="loaderBar"></div>
   </div>
   <div class="loader-percent" id="loaderPercent">CARREGANDO CIDADE... 0%</div>
-  <div class="loader-hint">PORTFOLIO 3D INTERATIVO</div>
+  <div class="loader-hint" data-i18n="loader_hint">PORTFOLIO 3D INTERATIVO</div>
 </div>
 
 <!-- 3D Scene -->
@@ -1053,56 +1070,58 @@ html, body {
 <!-- ENTER CITY POPUP -->
 <div id="enterCity" class="enter-overlay">
   <div class="enter-logo">G<span>.</span>INÁCIO</div>
-  <div class="enter-sub">Cyberpunk Portfolio &bull; 3D Interactive City</div>
-  <button id="enterBtn" class="enter-btn">ENTRAR NA CIDADE</button>
-  <div class="enter-note">Ative o volume para experiência completa</div>
+  <div class="enter-sub" data-i18n="enter_sub">Cyberpunk Portfolio &bull; 3D Interactive City</div>
+  <button id="enterBtn" class="enter-btn" data-i18n="enter_btn">ENTRAR NA CIDADE</button>
+  <div class="enter-note" data-i18n="enter_note">Ative o volume para experiência completa</div>
 </div>
 
 <!-- Nav HUD -->
 <nav class="nav-hud">
   <div class="logo">G<span>.</span>INÁCIO</div>
+  <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()">
     <span></span><span></span><span></span>
   </button>
   <div class="nav-buttons" id="navButtons">
-    <button class="nav-btn active" onclick="goToSection('hero')"><span>INÍCIO</span></button>
-    <button class="nav-btn" onclick="goToSection('about')"><span>SOBRE</span></button>
-    <button class="nav-btn" onclick="goToSection('stack')"><span>STACK</span></button>
-    <button class="nav-btn" onclick="goToSection('projects')"><span>PROJETOS</span></button>
-    <button class="nav-btn" onclick="goToSection('contact')"><span>CONTATO</span></button>
+    <button class="nav-btn active" onclick="goToSection('hero')"><span data-i18n="nav_home">INÍCIO</span></button>
+    <button class="nav-btn" onclick="goToSection('about')"><span data-i18n="nav_about">SOBRE</span></button>
+    <button class="nav-btn" onclick="goToSection('stack')"><span data-i18n="nav_stack">STACK</span></button>
+    <button class="nav-btn" onclick="goToSection('projects')"><span data-i18n="nav_projects">PROJETOS</span></button>
+    <button class="nav-btn" onclick="goToSection('contact')"><span data-i18n="nav_contact">CONTATO</span></button>
   </div>
 </nav>
 
-<audio id="bgMusic" src="music.mp3" loop preload="auto" autoplay muted></audio>
+<audio id="bgMusic" preload="auto" autoplay muted></audio>
 <div class="music-player" id="musicPlayer">
   <div class="music-eq">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
   <div class="music-status" id="musicStatus">AGUARDE</div>
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Play/Pause">▶</button>
+  <button class="music-btn" id="musicSkip" onclick="skipMusic()" title="Próxima música">⏭</button>
   <input type="range" class="music-vol" id="musicVol" min="0" max="1" step="0.01" value="0.07" title="Volume">
 </div>
 
 <!-- HERO Panel -->
 <div class="info-panel panel-animate panel-hero" id="panel-hero">
-  <div class="panel-tag">// FULLSTACK DEVELOPER</div>
+  <div class="panel-tag" data-i18n="hero_tag">// FULLSTACK DEVELOPER</div>
   <div class="hero-name">
     <div class="first">GABRIEL</div>
     <div class="last">INÁCIO</div>
   </div>
-  <div class="hero-role">&gt; Dev FullStack &bull; +3 anos de experiência</div>
+  <div class="hero-role" data-i18n="hero_role">&gt; Dev FullStack &bull; +3 anos de experiência</div>
   <div class="hero-stats">
     <div class="stat">
       <div class="stat-number">3+</div>
-      <div class="stat-label">Anos de XP</div>
+      <div class="stat-label" data-i18n="stat_years">Anos de XP</div>
     </div>
     <div class="stat">
       <div class="stat-number">10+</div>
-      <div class="stat-label">Tecnologias</div>
+      <div class="stat-label" data-i18n="stat_techs">Tecnologias</div>
     </div>
     <div class="stat">
       <div class="stat-number">∞</div>
-      <div class="stat-label">Curiosidade</div>
+      <div class="stat-label" data-i18n="stat_curiosity">Curiosidade</div>
     </div>
   </div>
 </div>
@@ -1110,54 +1129,54 @@ html, body {
 <!-- ABOUT Panel -->
 <div class="info-panel panel-animate panel-about" id="panel-about">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
-  <div class="panel-tag">// SOBRE MIM</div>
-  <div class="panel-title" style="--glitch-delay:0s">QUEM HABITA<br>ESSA CIDADE</div>
+  <div class="panel-tag" data-i18n="about_tag">// SOBRE MIM</div>
+  <div class="panel-title" style="--glitch-delay:0s"><span data-i18n="about_title_1">QUEM HABITA</span><br><span data-i18n="about_title_2">ESSA CIDADE</span></div>
   <div class="panel-body">
-    <p>Desenvolvedor FullStack com mais de 3 anos construindo aplicações que importam. Do frontend pixel-perfect ao backend robusto, passando por infraestrutura e segurança.</p>
+    <p data-i18n="about_p1">Desenvolvedor FullStack com mais de 3 anos construindo aplicações que importam. Do frontend pixel-perfect ao backend robusto, passando por infraestrutura e segurança.</p>
     <br>
-    <p>Minha abordagem combina código limpo com arquitetura inteligente. Tenho experiência com aplicações web e mobile, APIs escaláveis, deploy em cloud e boas práticas de segurança — incluindo conhecimento em pentest com Kali Linux.</p>
+    <p data-i18n="about_p2">Minha abordagem combina código limpo com arquitetura inteligente. Tenho experiência com aplicações web e mobile, APIs escaláveis, deploy em cloud e boas práticas de segurança — incluindo conhecimento em pentest com Kali Linux.</p>
     <br>
-    <p>Cada prédio nessa cidade representa um pedaço do que sei construir. Cada rua, uma conexão entre tecnologias que domino. Bem-vindo ao meu mundo.</p>
+    <p data-i18n="about_p3">Cada prédio nessa cidade representa um pedaço do que sei construir. Cada rua, uma conexão entre tecnologias que domino. Bem-vindo ao meu mundo.</p>
   </div>
 </div>
 
 <!-- STACK Panel -->
 <div class="info-panel panel-animate panel-stack" id="panel-stack">
   <button class="panel-close" onclick="goToSection('hero')">&times;</button>
-  <div class="panel-tag">// TECNOLOGIAS</div>
-  <div class="panel-title" style="--glitch-delay:2s">MEU ARSENAL</div>
+  <div class="panel-tag" data-i18n="stack_tag">// TECNOLOGIAS</div>
+  <div class="panel-title" style="--glitch-delay:2s" data-i18n="stack_title">MEU ARSENAL</div>
 
   <div class="tech-legend">
-    <span class="legend-dot fe">Frontend</span>
-    <span class="legend-dot mob">Mobile</span>
-    <span class="legend-dot be">Backend</span>
-    <span class="legend-dot db">Banco de Dados</span>
-    <span class="legend-dot cl">Cloud &amp; Infra</span>
-    <span class="legend-dot sec">Segurança</span>
+    <span class="legend-dot fe" data-i18n="leg_fe">Frontend</span>
+    <span class="legend-dot mob" data-i18n="leg_mob">Mobile</span>
+    <span class="legend-dot be" data-i18n="leg_be">Backend</span>
+    <span class="legend-dot db" data-i18n="leg_db">Banco de Dados</span>
+    <span class="legend-dot cl" data-i18n="leg_cl">Cloud &amp; Infra</span>
+    <span class="legend-dot sec" data-i18n="leg_sec">Segurança</span>
   </div>
 
   <div class="tech-cloud">
-    <span class="tech-badge fe">React</span>
-    <span class="tech-badge fe">Vue.js</span>
-    <span class="tech-badge fe">Next.js</span>
-    <span class="tech-badge fe">Nuxt</span>
-    <span class="tech-badge fe">TypeScript</span>
-    <span class="tech-badge mob">Flutter</span>
-    <span class="tech-badge mob">React Native</span>
-    <span class="tech-badge be">Node.js</span>
-    <span class="tech-badge be">Spring</span>
-    <span class="tech-badge be">Prisma</span>
-    <span class="tech-badge be">REST API</span>
-    <span class="tech-badge db">PostgreSQL</span>
-    <span class="tech-badge db">MongoDB</span>
-    <span class="tech-badge db">Redis</span>
-    <span class="tech-badge cl">AWS</span>
-    <span class="tech-badge cl">Linux</span>
-    <span class="tech-badge cl">Docker</span>
-    <span class="tech-badge cl">Nginx</span>
-    <span class="tech-badge sec">Kali Linux</span>
-    <span class="tech-badge sec">Pentest</span>
-    <span class="tech-badge sec">SQL Injection</span>
+    <a href="https://react.dev" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/react/00f0ff" alt="">React</a>
+    <a href="https://vuejs.org" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/vuedotjs/00f0ff" alt="">Vue.js</a>
+    <a href="https://nextjs.org" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/nextdotjs/00f0ff" alt="">Next.js</a>
+    <a href="https://nuxt.com" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/nuxtdotjs/00f0ff" alt="">Nuxt</a>
+    <a href="https://typescriptlang.org" target="_blank" rel="noopener" class="tech-badge fe"><img class="tech-icon" src="https://cdn.simpleicons.org/typescript/00f0ff" alt="">TypeScript</a>
+    <a href="https://flutter.dev" target="_blank" rel="noopener" class="tech-badge mob"><img class="tech-icon" src="https://cdn.simpleicons.org/flutter/f0ff00" alt="">Flutter</a>
+    <a href="https://reactnative.dev" target="_blank" rel="noopener" class="tech-badge mob"><img class="tech-icon" src="https://cdn.simpleicons.org/react/f0ff00" alt="">React Native</a>
+    <a href="https://nodejs.org" target="_blank" rel="noopener" class="tech-badge be"><img class="tech-icon" src="https://cdn.simpleicons.org/nodedotjs/ff00aa" alt="">Node.js</a>
+    <a href="https://spring.io" target="_blank" rel="noopener" class="tech-badge be"><img class="tech-icon" src="https://cdn.simpleicons.org/spring/ff00aa" alt="">Spring</a>
+    <a href="https://prisma.io" target="_blank" rel="noopener" class="tech-badge be"><img class="tech-icon" src="https://cdn.simpleicons.org/prisma/ff00aa" alt="">Prisma</a>
+    <a href="https://restfulapi.net" target="_blank" rel="noopener" class="tech-badge be"><svg class="tech-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>REST API</a>
+    <a href="https://postgresql.org" target="_blank" rel="noopener" class="tech-badge db"><img class="tech-icon" src="https://cdn.simpleicons.org/postgresql/66ffcc" alt="">PostgreSQL</a>
+    <a href="https://mongodb.com" target="_blank" rel="noopener" class="tech-badge db"><img class="tech-icon" src="https://cdn.simpleicons.org/mongodb/66ffcc" alt="">MongoDB</a>
+    <a href="https://redis.io" target="_blank" rel="noopener" class="tech-badge db"><img class="tech-icon" src="https://cdn.simpleicons.org/redis/66ffcc" alt="">Redis</a>
+    <a href="https://aws.amazon.com" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/amazonaws/3399ff" alt="">AWS</a>
+    <a href="https://kernel.org" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/linux/3399ff" alt="">Linux</a>
+    <a href="https://docker.com" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/docker/3399ff" alt="">Docker</a>
+    <a href="https://nginx.org" target="_blank" rel="noopener" class="tech-badge cl"><img class="tech-icon" src="https://cdn.simpleicons.org/nginx/3399ff" alt="">Nginx</a>
+    <a href="https://kali.org" target="_blank" rel="noopener" class="tech-badge sec"><img class="tech-icon" src="https://cdn.simpleicons.org/kalilinux/ff3366" alt="">Kali Linux</a>
+    <a href="https://owasp.org" target="_blank" rel="noopener" class="tech-badge sec"><svg class="tech-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>Pentest</a>
+    <a href="https://owasp.org/www-community/attacks/SQL_Injection" target="_blank" rel="noopener" class="tech-badge sec"><svg class="tech-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>SQL Injection</a>
   </div>
 </div>
 
@@ -1273,34 +1292,18 @@ container.appendChild(renderer.domElement);
 
 // CubeTexture skybox
 const cubeLoader = new THREE.CubeTextureLoader();
-cubeLoader.setPath('skybox/');
+cubeLoader.setPath('assets/skybox/');
 const skyboxTex = cubeLoader.load([
-  'skybox_right.png', 'skybox_left.png',
-  'skybox_up.png',    'skybox_down.png',
-  'skybox_front.png', 'skybox_back.png'
+  'skybox_right.png', 
+  'skybox_left.png',
+  'skybox_up.png',    
+  'skybox_down.png',
+  'skybox_back.png', 
+  'skybox_front.png' 
 ]);
 skyboxTex.colorSpace = THREE.SRGBColorSpace;
 scene.background = skyboxTex;
 
-// Floating neon cubes — decorative ambience
-const _floatCubes = [];
-const _cubeData = [
-  { pos: [-14,  9, -7],  color: 0x00f0ff, size: 0.9, rs: [0.007,  0.012, 0.004] },
-  { pos: [ 18, 13, -18], color: 0xff00aa, size: 1.1, rs: [-0.005, 0.009, 0.007] },
-  { pos: [ -7, 16,  14], color: 0xf0ff00, size: 0.7, rs: [0.010, -0.006, 0.009] },
-  { pos: [ 22,  7,   9], color: 0x00f0ff, size: 1.3, rs: [0.004,  0.014,-0.005] },
-  { pos: [-19, 11,  19], color: 0xff00aa, size: 0.8, rs: [-0.008, 0.006, 0.011] },
-  { pos: [  5, 18, -28], color: 0xf0ff00, size: 1.0, rs: [0.006, -0.010, 0.008] },
-];
-_cubeData.forEach((d, idx) => {
-  const geo = new THREE.BoxGeometry(d.size, d.size, d.size);
-  const mat = new THREE.MeshBasicMaterial({ color: d.color, wireframe: true, transparent: true, opacity: 0.6 });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.position.set(d.pos[0], d.pos[1], d.pos[2]);
-  mesh.userData = { rs: d.rs, baseY: d.pos[1], phi: idx * 1.1 };
-  scene.add(mesh);
-  _floatCubes.push(mesh);
-});
 
 // ===================== LIGHTING — tuned for nebula (purple/pink/blue sky) =====================
 // Ambient — purple-blue to match nebula
@@ -1372,7 +1375,39 @@ scene.add(groundBounce);
 
 // ===================== GROUND =====================
 const groundGeo = new THREE.PlaneGeometry(300, 300);
-const groundMat = new THREE.MeshStandardMaterial({ color: 0x0f0818, roughness: 0.3, metalness: 0.7 });
+
+// Procedural neon grid ground texture
+const groundCanvas = document.createElement('canvas');
+groundCanvas.width = groundCanvas.height = 512;
+const gCtx = groundCanvas.getContext('2d');
+gCtx.fillStyle = '#0f0818';
+gCtx.fillRect(0, 0, 512, 512);
+gCtx.strokeStyle = 'rgba(255,0,102,0.35)';
+gCtx.lineWidth = 1;
+const _gridStep = 32;
+for (let gi = 0; gi <= 512; gi += _gridStep) {
+  gCtx.beginPath(); gCtx.moveTo(gi, 0); gCtx.lineTo(gi, 512); gCtx.stroke();
+  gCtx.beginPath(); gCtx.moveTo(0, gi); gCtx.lineTo(512, gi); gCtx.stroke();
+}
+gCtx.fillStyle = 'rgba(255,0,170,0.6)';
+for (let gx = 0; gx <= 512; gx += _gridStep) {
+  for (let gy = 0; gy <= 512; gy += _gridStep) {
+    gCtx.beginPath(); gCtx.arc(gx, gy, 1.5, 0, Math.PI * 2); gCtx.fill();
+  }
+}
+for (let n = 0; n < 600; n++) {
+  const nx = Math.random() * 512;
+  const ny = Math.random() * 512;
+  const alpha = Math.random() * 0.08;
+  gCtx.fillStyle = `rgba(180,0,255,${alpha})`;
+  gCtx.fillRect(nx, ny, 1, 1);
+}
+const groundTex = new THREE.CanvasTexture(groundCanvas);
+groundTex.wrapS = groundTex.wrapT = THREE.RepeatWrapping;
+groundTex.repeat.set(20, 20);
+groundTex.colorSpace = THREE.SRGBColorSpace;
+
+const groundMat = new THREE.MeshStandardMaterial({ map: groundTex, roughness: 0.4, metalness: 0.6, color: 0xffffff });
 const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.rotation.x = -Math.PI / 2;
 ground.position.y = -0.5;
@@ -1433,7 +1468,7 @@ function parseGLB(buffer) {
 
 (async () => {
   try {
-    const cityBuffer = await loadGLB('city.glb', (loaded, total) => {
+    const cityBuffer = await loadGLB('assets/scene/city.glb', (loaded, total) => {
       const pct = Math.round((loaded / total) * 100);
       loaderBar.style.width = pct + '%';
       loaderPercent.textContent = 'CARREGANDO CIDADE... ' + pct + '%';
@@ -1656,6 +1691,19 @@ function animate() {
   accentPurple2.intensity = 3 + Math.sin(elapsed * 0.6 + 3) * 0.7;
   groundBounce.intensity = 2 + Math.sin(elapsed * 0.5) * 0.5;
 
+  // Dynamic moon/sun orbit — light rotates in slow arc, intensity pulses
+  const moonAngle = elapsed * 0.04;
+  moonLight.position.x = Math.cos(moonAngle) * 40;
+  moonLight.position.z = Math.sin(moonAngle) * 30;
+  moonLight.position.y = 20 + Math.sin(moonAngle * 0.5) * 15;
+  moonLight.intensity = 1.0 + Math.sin(elapsed * 0.2) * 0.3;
+  const moonCycleT = (Math.sin(elapsed * 0.015) + 1) / 2;
+  moonLight.color.setRGB(
+    (0xbb * (1 - moonCycleT) + 0xcc * moonCycleT) / 255,
+    (0x77 * (1 - moonCycleT) + 0xcc * moonCycleT) / 255,
+    1.0
+  );
+
   // Float particles
   const positions = particleGeo.attributes.position.array;
   for (let i = 0; i < particleCount; i++) {
@@ -1663,14 +1711,6 @@ function animate() {
   }
   particleGeo.attributes.position.needsUpdate = true;
 
-  // Animate floating cubes
-  _floatCubes.forEach((cube) => {
-    const ud = cube.userData;
-    cube.rotation.x += ud.rs[0];
-    cube.rotation.y += ud.rs[1];
-    cube.rotation.z += ud.rs[2];
-    cube.position.y = ud.baseY + Math.sin(elapsed * 0.6 + ud.phi) * 0.9;
-  });
 
   // Coords HUD
   const coordsEl = document.getElementById('coords');
@@ -1695,6 +1735,44 @@ animate();
   audio.volume = TARGET_VOL;
   vol.value    = String(TARGET_VOL);
 
+  // ── Playlist ──────────────────────────────────────────────
+  const TRACKS = [
+    '/assets/musics/music.mp3',
+    '/assets/musics/music2.mp3',
+    '/assets/musics/music3.mp3',
+    '/assets/musics/music4.mp3',
+    '/assets/musics/music5.mp3',
+    '/assets/musics/music6.mp3',
+    '/assets/musics/music7.mp3',
+  ];
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  let playlist = shuffle([...TRACKS]);
+  let trackIdx = 0;
+
+  function loadTrack(idx) {
+    audio.src = playlist[idx];
+    audio.load();
+  }
+
+  function playNext() {
+    trackIdx = (trackIdx + 1) % playlist.length;
+    if (trackIdx === 0) playlist = shuffle([...TRACKS]);
+    loadTrack(trackIdx);
+    audio.play().then(() => setPlaying(true)).catch(() => {});
+  }
+
+  loadTrack(trackIdx);
+  audio.addEventListener('ended', playNext);
+
+  // ── UI ────────────────────────────────────────────────────
   function setPlaying(playing) {
     btn.textContent    = playing ? '⏸' : '▶';
     status.textContent = playing ? 'TOCANDO' : 'PAUSADO';
@@ -1710,14 +1788,15 @@ animate();
     }
   };
 
-  // Autoplay garantido: <audio autoplay muted> já inicia tocando silenciosamente.
-  // startMusic() apenas desmuta quando a cena estiver pronta.
+  window.skipMusic = function() {
+    playNext();
+  };
+
   window.startMusic = function() {
     audio.muted  = false;
     audio.volume = TARGET_VOL;
     vol.value    = String(TARGET_VOL);
     if (audio.paused) {
-      // fallback se autoplay foi bloqueado mesmo mudo
       audio.play().then(() => setPlaying(true)).catch(() => {
         status.textContent = 'CLIQUE ▶';
       });
@@ -1830,13 +1909,18 @@ animate();
     var title = panel.querySelector('.panel-title');
     var body  = panel.querySelector('.panel-body');
     var paras = panel.querySelectorAll('.panel-body p');
+    var SPEED = 14; // ms per character
 
     if (tag)   scramble(tag, 0.7, 0);
     if (title) scramble(title, 1.0, 280);
     if (body)  body.style.opacity = '1';
 
-    paras.forEach(function (p, i) {
-      typewriter(p, 820 + i * 1300, 14);
+    // Sequential: each paragraph starts only after the previous one finishes
+    var cumulativeDelay = 820;
+    paras.forEach(function (p) {
+      var txt = p.innerText || p.textContent;
+      typewriter(p, cumulativeDelay, SPEED);
+      cumulativeDelay += txt.length * SPEED + 400;
     });
   }
 
