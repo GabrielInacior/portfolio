@@ -1365,26 +1365,24 @@ scene.fog = new THREE.FogExp2(0x0a0015, 0.003);
 
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x050010, 1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.8;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 container.appendChild(renderer.domElement);
 
 // CubeTexture skybox
 const cubeLoader = new THREE.CubeTextureLoader();
 cubeLoader.setPath('assets/skybox/');
 const skyboxTex = cubeLoader.load([
-  'skybox_right.png', 
-  'skybox_left.png',
-  'skybox_up.png',    
-  'skybox_down.png',
-  'skybox_back.png', 
-  'skybox_front.png' 
+  'skybox_right.jpg',
+  'skybox_left.jpg',
+  'skybox_up.jpg',
+  'skybox_down.jpg',
+  'skybox_back.jpg',
+  'skybox_front.jpg'
 ]);
 skyboxTex.colorSpace = THREE.SRGBColorSpace;
 scene.background = skyboxTex;
@@ -1402,14 +1400,6 @@ scene.add(hemiLight);
 // Main directional — blue-purple moonlight from nebula glow
 const moonLight = new THREE.DirectionalLight(0xbb77ff, 1.2);
 moonLight.position.set(20, 40, 15);
-moonLight.castShadow = true;
-moonLight.shadow.mapSize.set(2048, 2048);
-moonLight.shadow.camera.near = 0.5;
-moonLight.shadow.camera.far = 100;
-moonLight.shadow.camera.left = -40;
-moonLight.shadow.camera.right = 40;
-moonLight.shadow.camera.top = 40;
-moonLight.shadow.camera.bottom = -40;
 scene.add(moonLight);
 
 // Secondary fill from opposite side
@@ -1417,43 +1407,20 @@ const fillLight = new THREE.DirectionalLight(0x0066ff, 0.5);
 fillLight.position.set(-20, 20, -10);
 scene.add(fillLight);
 
-// Cyan/teal accent (matches nebula blue regions)
-const accentCyan = new THREE.PointLight(0x00ccff, 6, 50);
-accentCyan.position.set(-8, 3, -5);
+// Consolidated accent lights (4 instead of 9 for performance)
+const accentCyan = new THREE.PointLight(0x00ddff, 8, 60);
+accentCyan.position.set(-5, 4, -8);
 scene.add(accentCyan);
 
-const accentCyan2 = new THREE.PointLight(0x00eeff, 5, 45);
-accentCyan2.position.set(8, 4, -12);
-scene.add(accentCyan2);
-
-// Magenta/pink (matches nebula red/pink regions)
-const accentPink = new THREE.PointLight(0xff0066, 6, 50);
+const accentPink = new THREE.PointLight(0xff0077, 8, 60);
 accentPink.position.set(5, 4, 5);
 scene.add(accentPink);
 
-const accentPink2 = new THREE.PointLight(0xff0088, 5, 45);
-accentPink2.position.set(-10, 3, 8);
-scene.add(accentPink2);
-
-// Purple (matches the core nebula hue)
-const accentPurple = new THREE.PointLight(0xaa00ff, 6, 55);
-accentPurple.position.set(0, 6, 0);
+const accentPurple = new THREE.PointLight(0x8800ff, 6, 70);
+accentPurple.position.set(0, 8, 0);
 scene.add(accentPurple);
 
-const accentPurple2 = new THREE.PointLight(0x6600cc, 4, 45);
-accentPurple2.position.set(12, 5, -8);
-scene.add(accentPurple2);
-
-// High-altitude nebula glow (far overhead corners)
-const nebula1 = new THREE.PointLight(0xff3388, 3, 80);
-nebula1.position.set(-20, 25, -20);
-scene.add(nebula1);
-
-const nebula2 = new THREE.PointLight(0x3300ff, 3, 80);
-nebula2.position.set(20, 25, 20);
-scene.add(nebula2);
-
-// Ground bounce — purple glow from below
+// Ground bounce
 const groundBounce = new THREE.PointLight(0x8833ff, 3, 60);
 groundBounce.position.set(0, 1, 0);
 scene.add(groundBounce);
@@ -1463,7 +1430,7 @@ const groundGeo = new THREE.PlaneGeometry(300, 300);
 
 // Use skybox_down image as ground texture
 const groundTexLoader = new THREE.TextureLoader();
-const groundTex = groundTexLoader.load('assets/skybox/skybox_down.png');
+const groundTex = groundTexLoader.load('assets/skybox/skybox_down.jpg');
 groundTex.wrapS = groundTex.wrapT = THREE.RepeatWrapping;
 groundTex.repeat.set(1, 1);
 groundTex.colorSpace = THREE.SRGBColorSpace;
@@ -1472,7 +1439,6 @@ const groundMat = new THREE.MeshBasicMaterial({ map: groundTex });
 const ground = new THREE.Mesh(groundGeo, groundMat);
 ground.rotation.x = -Math.PI / 2;
 ground.position.y = -0.5;
-ground.receiveShadow = true;
 scene.add(ground);
 
 const gridHelper = new THREE.GridHelper(200, 80, 0xff0066, 0x110011);
@@ -1482,29 +1448,23 @@ gridHelper.material.transparent = true;
 scene.add(gridHelper);
 
 // ===================== CYBERPUNK SUN =====================
-const sunGeo = new THREE.SphereGeometry(3, 32, 32);
+const sunGeo = new THREE.SphereGeometry(3, 12, 12);
 const sunMat = new THREE.MeshBasicMaterial({ color: 0xff2266 });
 const sunMesh = new THREE.Mesh(sunGeo, sunMat);
 scene.add(sunMesh);
 
-// Sun glow (larger transparent sphere)
-const sunGlowGeo = new THREE.SphereGeometry(6, 32, 32);
-const sunGlowMat = new THREE.MeshBasicMaterial({ color: 0xff0066, transparent: true, opacity: 0.15 });
+// Sun glow (single layer instead of two)
+const sunGlowGeo = new THREE.SphereGeometry(7, 12, 12);
+const sunGlowMat = new THREE.MeshBasicMaterial({ color: 0xff0066, transparent: true, opacity: 0.12 });
 const sunGlow = new THREE.Mesh(sunGlowGeo, sunGlowMat);
 scene.add(sunGlow);
 
-// Sun outer halo
-const sunHaloGeo = new THREE.SphereGeometry(10, 32, 32);
-const sunHaloMat = new THREE.MeshBasicMaterial({ color: 0xff3388, transparent: true, opacity: 0.05 });
-const sunHalo = new THREE.Mesh(sunHaloGeo, sunHaloMat);
-scene.add(sunHalo);
-
-// Sun point light (casts colored light on city)
-const sunLight = new THREE.PointLight(0xff2266, 8, 200);
+// Sun point light
+const sunLight = new THREE.PointLight(0xff2266, 6, 150);
 scene.add(sunLight);
 
 // ===================== PARTICLES =====================
-const particleCount = 500;
+const particleCount = 200;
 const particleGeo = new THREE.BufferGeometry();
 const particlePositions = new Float32Array(particleCount * 3);
 for (let i = 0; i < particleCount; i++) {
@@ -1572,10 +1532,7 @@ function parseGLB(buffer) {
     model.position.y = 0;
 
     model.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
+      if (child.isMesh) { child.frustumCulled = true; }
     });
 
     cityModel = model;
@@ -1768,43 +1725,16 @@ function animate() {
     showSection(roundedSection);
   }
 
-  // Pulse accent lights
-  accentPink.intensity = 4 + Math.sin(elapsed * 1.2) * 1;
-  accentPink2.intensity = 3 + Math.sin(elapsed * 1.5 + 1) * 0.8;
-  accentCyan.intensity = 4 + Math.sin(elapsed * 0.9 + 1) * 1;
-  accentCyan2.intensity = 3 + Math.sin(elapsed * 1.1 + 2) * 0.8;
-  accentPurple.intensity = 4 + Math.sin(elapsed * 0.7 + 2) * 1;
-  accentPurple2.intensity = 3 + Math.sin(elapsed * 0.6 + 3) * 0.7;
-  groundBounce.intensity = 2 + Math.sin(elapsed * 0.5) * 0.5;
+  // Pulse accent lights (simplified)
+  accentPink.intensity = 6 + Math.sin(elapsed * 1.2) * 2;
+  accentCyan.intensity = 6 + Math.sin(elapsed * 0.9 + 1) * 2;
+  accentPurple.intensity = 5 + Math.sin(elapsed * 0.7 + 2) * 1;
 
-  // Dynamic moon/sun orbit — light rotates in slow arc, intensity pulses
-  const moonAngle = elapsed * 0.04;
-  moonLight.position.x = Math.cos(moonAngle) * 40;
-  moonLight.position.z = Math.sin(moonAngle) * 30;
-  moonLight.position.y = 20 + Math.sin(moonAngle * 0.5) * 15;
-  moonLight.intensity = 1.0 + Math.sin(elapsed * 0.2) * 0.3;
-  const moonCycleT = (Math.sin(elapsed * 0.015) + 1) / 2;
-  moonLight.color.setRGB(
-    (0xbb * (1 - moonCycleT) + 0xcc * moonCycleT) / 255,
-    (0x77 * (1 - moonCycleT) + 0xcc * moonCycleT) / 255,
-    1.0
-  );
-
-  // Cyberpunk sun orbit — lateral arc across the sky
+  // Cyberpunk sun orbit
   const sunAngle = elapsed * 0.06;
-  const sunX = Math.cos(sunAngle) * 80;
-  const sunY = 35 + Math.sin(sunAngle * 0.3) * 10;
-  const sunZ = Math.sin(sunAngle) * 60;
-  sunMesh.position.set(sunX, sunY, sunZ);
+  sunMesh.position.set(Math.cos(sunAngle) * 80, 35 + Math.sin(sunAngle * 0.3) * 10, Math.sin(sunAngle) * 60);
   sunGlow.position.copy(sunMesh.position);
-  sunHalo.position.copy(sunMesh.position);
   sunLight.position.copy(sunMesh.position);
-  // Pulse sun glow
-  sunGlowMat.opacity = 0.12 + Math.sin(elapsed * 2) * 0.05;
-  sunHaloMat.opacity = 0.04 + Math.sin(elapsed * 1.3 + 1) * 0.02;
-  // Color shift between magenta and orange-red
-  const sunHue = (Math.sin(elapsed * 0.1) + 1) / 2;
-  sunMat.color.setRGB(1.0, 0.1 + sunHue * 0.3, 0.3 + sunHue * 0.2);
 
   // Float particles
   const positions = particleGeo.attributes.position.array;
@@ -2038,20 +1968,19 @@ const TECH_DATA = {
     chip.addEventListener('click', () => selectTech(chip.dataset.tech));
   });
 
-  // Animation
+  // Animation — only render when stack panel is visible
   const hClock = new THREE.Clock();
+  const stackPanel = document.getElementById('panel-stack');
   function animateHolo() {
     requestAnimationFrame(animateHolo);
+    if (!stackPanel || !stackPanel.classList.contains('visible')) return;
     const t = hClock.getElapsedTime();
     hCube.rotation.y = t * 0.5;
     hCube.rotation.x = Math.sin(t * 0.3) * 0.15;
     hWire.rotation.copy(hCube.rotation);
-    // Float bob
     hCube.position.y = Math.sin(t * 0.8) * 0.1;
     hWire.position.y = hCube.position.y;
-    // Particle drift
     hParts.rotation.y = t * 0.15;
-    hParts.rotation.x = t * 0.08;
     hRenderer.render(hScene, hCam);
   }
   animateHolo();
@@ -2074,13 +2003,13 @@ const TECH_DATA = {
 
   // ── Playlist ──────────────────────────────────────────────
   const TRACKS = [
-    '/assets/musics/music.mp3',
-    '/assets/musics/music2.mp3',
-    '/assets/musics/music3.mp3',
-    '/assets/musics/music4.mp3',
-    '/assets/musics/music5.mp3',
-    '/assets/musics/music6.mp3',
-    '/assets/musics/music7.mp3',
+    'assets/musics/music.mp3',
+    'assets/musics/music2.mp3',
+    'assets/musics/music3.mp3',
+    'assets/musics/music4.mp3',
+    'assets/musics/music5.mp3',
+    'assets/musics/music6.mp3',
+    'assets/musics/music7.mp3',
   ];
 
   function shuffle(arr) {
