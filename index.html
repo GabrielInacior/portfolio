@@ -1260,7 +1260,7 @@ html, body {
       <div class="tech-chip" data-tech="react"><img src="https://cdn.simpleicons.org/react/00f0ff" alt="">React</div>
       <div class="tech-chip active" data-tech="vuejs"><img src="https://cdn.simpleicons.org/vuedotjs/00f0ff" alt="">Vue.js</div>
       <div class="tech-chip" data-tech="nextjs"><img src="https://cdn.simpleicons.org/nextdotjs/00f0ff" alt="">Next.js</div>
-      <div class="tech-chip" data-tech="nuxt"><img src="https://cdn.simpleicons.org/nuxtdotjs/00f0ff" alt="">Nuxt</div>
+      <div class="tech-chip" data-tech="nuxt"><img src="https://cdn.simpleicons.org/nuxt/00f0ff" alt="">Nuxt</div>
       <div class="tech-chip" data-tech="typescript"><img src="https://cdn.simpleicons.org/typescript/00f0ff" alt="">TS</div>
       <div class="tech-chip" data-tech="flutter"><img src="https://cdn.simpleicons.org/flutter/f0ff00" alt="">Flutter</div>
       <div class="tech-chip" data-tech="reactnative"><img src="https://cdn.simpleicons.org/react/f0ff00" alt="">RN</div>
@@ -1270,7 +1270,7 @@ html, body {
       <div class="tech-chip" data-tech="postgresql"><img src="https://cdn.simpleicons.org/postgresql/66ffcc" alt="">Postgres</div>
       <div class="tech-chip" data-tech="mongodb"><img src="https://cdn.simpleicons.org/mongodb/66ffcc" alt="">Mongo</div>
       <div class="tech-chip" data-tech="redis"><img src="https://cdn.simpleicons.org/redis/66ffcc" alt="">Redis</div>
-      <div class="tech-chip" data-tech="aws"><img src="https://cdn.simpleicons.org/amazonaws/3399ff" alt="">AWS</div>
+      <div class="tech-chip" data-tech="aws"><img src="https://cdn.simpleicons.org/amazonwebservices/3399ff" alt="">AWS</div>
       <div class="tech-chip" data-tech="linux"><img src="https://cdn.simpleicons.org/linux/3399ff" alt="">Linux</div>
       <div class="tech-chip" data-tech="docker"><img src="https://cdn.simpleicons.org/docker/3399ff" alt="">Docker</div>
       <div class="tech-chip" data-tech="nginx"><img src="https://cdn.simpleicons.org/nginx/3399ff" alt="">Nginx</div>
@@ -1806,7 +1806,7 @@ const TECH_DATA = {
   react:       { name: 'React',       desc: 'Component-based UI library',   color: 0x00f0ff, url: 'https://react.dev',       icon: 'https://cdn.simpleicons.org/react/00f0ff' },
   vuejs:       { name: 'Vue.js',      desc: 'Progressive JS framework',     color: 0x00f0ff, url: 'https://vuejs.org',       icon: 'https://cdn.simpleicons.org/vuedotjs/00f0ff' },
   nextjs:      { name: 'Next.js',     desc: 'React SSR/SSG framework',      color: 0x00f0ff, url: 'https://nextjs.org',      icon: 'https://cdn.simpleicons.org/nextdotjs/00f0ff' },
-  nuxt:        { name: 'Nuxt',        desc: 'Vue SSR/SSG framework',        color: 0x00f0ff, url: 'https://nuxt.com',        icon: 'https://cdn.simpleicons.org/nuxtdotjs/00f0ff' },
+  nuxt:        { name: 'Nuxt',        desc: 'Vue SSR/SSG framework',        color: 0x00f0ff, url: 'https://nuxt.com',        icon: 'https://cdn.simpleicons.org/nuxt/00f0ff' },
   typescript:  { name: 'TypeScript',  desc: 'Typed JavaScript superset',    color: 0x00f0ff, url: 'https://typescriptlang.org', icon: 'https://cdn.simpleicons.org/typescript/00f0ff' },
   flutter:     { name: 'Flutter',     desc: 'Cross-platform mobile SDK',    color: 0xf0ff00, url: 'https://flutter.dev',     icon: 'https://cdn.simpleicons.org/flutter/f0ff00' },
   reactnative: { name: 'React Native',desc: 'Native mobile with React',     color: 0xf0ff00, url: 'https://reactnative.dev', icon: 'https://cdn.simpleicons.org/react/f0ff00' },
@@ -1816,7 +1816,7 @@ const TECH_DATA = {
   postgresql:  { name: 'PostgreSQL',  desc: 'Advanced relational database', color: 0x66ffcc, url: 'https://postgresql.org',  icon: 'https://cdn.simpleicons.org/postgresql/66ffcc' },
   mongodb:     { name: 'MongoDB',     desc: 'NoSQL document database',      color: 0x66ffcc, url: 'https://mongodb.com',     icon: 'https://cdn.simpleicons.org/mongodb/66ffcc' },
   redis:       { name: 'Redis',       desc: 'In-memory data store',         color: 0x66ffcc, url: 'https://redis.io',        icon: 'https://cdn.simpleicons.org/redis/66ffcc' },
-  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://cdn.simpleicons.org/amazonaws/3399ff' },
+  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://cdn.simpleicons.org/amazonwebservices/3399ff' },
   linux:       { name: 'Linux',       desc: 'Open-source operating system', color: 0x3399ff, url: 'https://kernel.org',      icon: 'https://cdn.simpleicons.org/linux/3399ff' },
   docker:      { name: 'Docker',      desc: 'Container platform',           color: 0x3399ff, url: 'https://docker.com',      icon: 'https://cdn.simpleicons.org/docker/3399ff' },
   nginx:       { name: 'Nginx',       desc: 'High-perf web server / proxy', color: 0x3399ff, url: 'https://nginx.org',       icon: 'https://cdn.simpleicons.org/nginx/3399ff' },
@@ -1862,13 +1862,11 @@ const TECH_DATA = {
   const hWire = new THREE.Mesh(hWireGeo, hWireMat);
   hScene.add(hWire);
 
-  // The solid cube — brighter emissive, map will override color
-  const hMat = new THREE.MeshStandardMaterial({
-    color: 0x222244,
-    roughness: 0.2,
-    metalness: 0.7,
-    emissive: 0x00f0ff,
-    emissiveIntensity: 0.4,
+  // The solid cube — BasicMaterial so canvas texture renders without lighting distortion
+  const hMat = new THREE.MeshBasicMaterial({
+    color: 0x00f0ff,
+    transparent: true,
+    opacity: 0.92,
   });
   const hCube = new THREE.Mesh(hGeo, hMat);
   hScene.add(hCube);
@@ -1928,8 +1926,11 @@ const TECH_DATA = {
       const resp = await fetch(url);
       if (!resp.ok) throw new Error('fetch failed');
       let svgText = await resp.text();
-      // Force SVG dimensions for consistent rendering
-      svgText = svgText.replace(/<svg/, '<svg width="128" height="128"');
+      // Remove any existing width/height so our values take effect
+      svgText = svgText
+        .replace(/\s+width="[^"]*"/, '')
+        .replace(/\s+height="[^"]*"/, '')
+        .replace(/<svg/, '<svg width="256" height="256"');
       const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
       const blobUrl = URL.createObjectURL(blob);
       const img = new Image();
@@ -1993,13 +1994,14 @@ const TECH_DATA = {
     hPoint.color.copy(c);
     hWireMat.color.copy(c);
     hPartMat.color.copy(c);
-    hMat.emissive.copy(c);
+    hMat.color.copy(c); // tint while texture loads
 
     // Load icon texture onto cube faces
     const colorStr = '#' + c.getHexString();
     const tex = await loadIconTexture(data.icon, colorStr, data.name);
     if (tex && currentTech === key) {
       hMat.map = tex;
+      hMat.color.set(0xffffff); // white so texture colors are unaffected
       hMat.needsUpdate = true;
     }
 
