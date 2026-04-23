@@ -1263,14 +1263,14 @@ html, body {
       <div class="tech-chip" data-tech="nuxt"><img src="https://cdn.simpleicons.org/nuxt/00f0ff" alt="">Nuxt</div>
       <div class="tech-chip" data-tech="typescript"><img src="https://cdn.simpleicons.org/typescript/00f0ff" alt="">TS</div>
       <div class="tech-chip" data-tech="flutter"><img src="https://cdn.simpleicons.org/flutter/f0ff00" alt="">Flutter</div>
-      <div class="tech-chip" data-tech="reactnative"><img src="https://cdn.simpleicons.org/react/f0ff00" alt="">RN</div>
+      <div class="tech-chip" data-tech="reactnative"><img src="https://cdn.simpleicons.org/react/f0ff00" alt="">React Native</div>
       <div class="tech-chip" data-tech="nodejs"><img src="https://cdn.simpleicons.org/nodedotjs/ff00aa" alt="">Node</div>
       <div class="tech-chip" data-tech="spring"><img src="https://cdn.simpleicons.org/spring/ff00aa" alt="">Spring</div>
       <div class="tech-chip" data-tech="prisma"><img src="https://cdn.simpleicons.org/prisma/ff00aa" alt="">Prisma</div>
       <div class="tech-chip" data-tech="postgresql"><img src="https://cdn.simpleicons.org/postgresql/66ffcc" alt="">Postgres</div>
       <div class="tech-chip" data-tech="mongodb"><img src="https://cdn.simpleicons.org/mongodb/66ffcc" alt="">Mongo</div>
       <div class="tech-chip" data-tech="redis"><img src="https://cdn.simpleicons.org/redis/66ffcc" alt="">Redis</div>
-      <div class="tech-chip" data-tech="aws"><img src="https://cdn.simpleicons.org/amazonwebservices/3399ff" alt="">AWS</div>
+      <div class="tech-chip" data-tech="aws"><img src="https://cdn.simpleicons.org/amazon/3399ff" alt="">AWS</div>
       <div class="tech-chip" data-tech="linux"><img src="https://cdn.simpleicons.org/linux/3399ff" alt="">Linux</div>
       <div class="tech-chip" data-tech="docker"><img src="https://cdn.simpleicons.org/docker/3399ff" alt="">Docker</div>
       <div class="tech-chip" data-tech="nginx"><img src="https://cdn.simpleicons.org/nginx/3399ff" alt="">Nginx</div>
@@ -1410,7 +1410,9 @@ scene.fog = new THREE.FogExp2(0x0a0015, 0.003);
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+// Lower pixel ratio on mobile — halves fill rate on 3x screens
+const _isMobile = /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+renderer.setPixelRatio(_isMobile ? Math.min(window.devicePixelRatio, 1) : Math.min(window.devicePixelRatio, 1.5));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setClearColor(0x050010, 1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1652,14 +1654,20 @@ function getCameraState(progress) {
 
 // ===================== PANEL MANAGEMENT =====================
 const allPanels = document.querySelectorAll('.info-panel');
+let panelIsOpen = false;
+const isMobile = /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+const TARGET_FPS = isMobile ? 30 : 60;
+const FRAME_MS  = 1000 / TARGET_FPS;
+let lastFrameTime = 0;
+let frameCount = 0;
 
-function hideAllPanels() { allPanels.forEach(p => p.classList.remove('visible')); }
+function hideAllPanels() { allPanels.forEach(p => p.classList.remove('visible')); panelIsOpen = false; }
 
 function showSection(index) {
   const section = sections[index];
   hideAllPanels();
   const panel = document.getElementById('panel-' + section);
-  if (panel) setTimeout(() => panel.classList.add('visible'), 200);
+  if (panel) setTimeout(() => { panel.classList.add('visible'); panelIsOpen = (section !== 'hero'); }, 200);
 
   document.querySelectorAll('.nav-btn').forEach((btn, i) => {
     btn.classList.toggle('active', i === index);
@@ -1751,11 +1759,17 @@ window.addEventListener('resize', () => {
 // ===================== ANIMATION LOOP =====================
 const clock = new THREE.Clock();
 
-function animate() {
+function animate(now) {
   requestAnimationFrame(animate);
+
+  // FPS cap (30 on mobile, 60 on desktop)
+  if (now - lastFrameTime < FRAME_MS) return;
+  lastFrameTime = now;
+  frameCount++;
+
   const elapsed = clock.getElapsedTime();
 
-  // Smooth scroll
+  // Smooth scroll (keep running — needed for section detection)
   scrollProgress += (targetProgress - scrollProgress) * 0.022;
 
   const clampedProgress = Math.max(0, Math.min(scrollProgress, sections.length - 1.001));
@@ -1774,7 +1788,10 @@ function animate() {
     showSection(roundedSection);
   }
 
-  // Pulse accent lights (simplified)
+  // Skip heavy rendering when a panel covers the scene
+  if (panelIsOpen) return;
+
+  // Pulse accent lights
   accentPink.intensity = 6 + Math.sin(elapsed * 1.2) * 2;
   accentCyan.intensity = 6 + Math.sin(elapsed * 0.9 + 1) * 2;
   accentPurple.intensity = 5 + Math.sin(elapsed * 0.7 + 2) * 1;
@@ -1785,21 +1802,24 @@ function animate() {
   sunGlow.position.copy(sunMesh.position);
   sunLight.position.copy(sunMesh.position);
 
-  // Float particles
-  const positions = particleGeo.attributes.position.array;
-  for (let i = 0; i < particleCount; i++) {
-    positions[i * 3 + 1] += Math.sin(elapsed * 0.3 + i) * 0.003;
+  // Float particles — update every other frame to halve CPU cost
+  if (frameCount % 2 === 0) {
+    const positions = particleGeo.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3 + 1] += Math.sin(elapsed * 0.3 + i) * 0.003;
+    }
+    particleGeo.attributes.position.needsUpdate = true;
   }
-  particleGeo.attributes.position.needsUpdate = true;
 
-
-  // Coords HUD
-  const coordsEl = document.getElementById('coords');
-  coordsEl.textContent = 'CAM: ' + camera.position.x.toFixed(1) + ', ' + camera.position.y.toFixed(1) + ', ' + camera.position.z.toFixed(1);
+  // Coords HUD — update only every 10 frames
+  if (frameCount % 10 === 0) {
+    const coordsEl = document.getElementById('coords');
+    coordsEl.textContent = 'CAM: ' + camera.position.x.toFixed(1) + ', ' + camera.position.y.toFixed(1) + ', ' + camera.position.z.toFixed(1);
+  }
 
   renderer.render(scene, camera);
 }
-animate();
+requestAnimationFrame(animate);
 
 // ===================== HOLOGRAM 3D VIEWER =====================
 const TECH_DATA = {
@@ -1816,7 +1836,7 @@ const TECH_DATA = {
   postgresql:  { name: 'PostgreSQL',  desc: 'Advanced relational database', color: 0x66ffcc, url: 'https://postgresql.org',  icon: 'https://cdn.simpleicons.org/postgresql/66ffcc' },
   mongodb:     { name: 'MongoDB',     desc: 'NoSQL document database',      color: 0x66ffcc, url: 'https://mongodb.com',     icon: 'https://cdn.simpleicons.org/mongodb/66ffcc' },
   redis:       { name: 'Redis',       desc: 'In-memory data store',         color: 0x66ffcc, url: 'https://redis.io',        icon: 'https://cdn.simpleicons.org/redis/66ffcc' },
-  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://cdn.simpleicons.org/amazonwebservices/3399ff' },
+  aws:         { name: 'AWS',         desc: 'Amazon cloud infrastructure',  color: 0x3399ff, url: 'https://aws.amazon.com',  icon: 'https://cdn.simpleicons.org/amazon/3399ff' },
   linux:       { name: 'Linux',       desc: 'Open-source operating system', color: 0x3399ff, url: 'https://kernel.org',      icon: 'https://cdn.simpleicons.org/linux/3399ff' },
   docker:      { name: 'Docker',      desc: 'Container platform',           color: 0x3399ff, url: 'https://docker.com',      icon: 'https://cdn.simpleicons.org/docker/3399ff' },
   nginx:       { name: 'Nginx',       desc: 'High-perf web server / proxy', color: 0x3399ff, url: 'https://nginx.org',       icon: 'https://cdn.simpleicons.org/nginx/3399ff' },
@@ -1833,7 +1853,7 @@ const TECH_DATA = {
   hCam.position.set(0, 0, 3.5);
 
   const hRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  hRenderer.setSize(220, 220);
+  hRenderer.setSize(220, 220, false); // false = don't set inline style, let CSS control display size
   hRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   hRenderer.setClearColor(0x000000, 0);
   hRenderer.toneMapping = THREE.ACESFilmicToneMapping;
