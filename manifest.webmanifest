@@ -1,0 +1,29 @@
+{
+  "name": "Gabriel Inácio — Dev FullStack",
+  "short_name": "Inácio Dev",
+  "description": "Portfólio 3D interativo de Gabriel Inácio, desenvolvedor FullStack.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00f0ff",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "assets/img/foto_teste.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/foto_teste.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/img/icone.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
